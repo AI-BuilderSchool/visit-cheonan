@@ -1,4 +1,5 @@
 <title>Visit Cheonan — 천안, 겨레의 길목에서</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23000000'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='26' font-weight='700' font-family='Arial, sans-serif' fill='%23FFFFFF'%3EVC%3C/text%3E%3C/svg%3E">
 
 <svg width="0" height="0" style="position:absolute">
   <defs>
@@ -87,7 +88,7 @@
     font-family:var(--font-body); font-weight:600; font-size:.72rem;
     letter-spacing:.16em; text-transform:uppercase; color:var(--gold);
   }
-  .wrap{max-width:var(--maxw); margin:0 auto; padding-inline:var(--pad); width:100%}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding-inline:var(--pad); width:100%; position:relative}
   .section{
     position:relative;
     padding-block:clamp(64px,9vw,112px);
@@ -200,11 +201,21 @@
   .head-actions{display:flex; align-items:center; gap:18px; font-size:.85rem}
   .head-actions .ico{width:18px; height:18px}
   .head-actions button{display:flex; align-items:center; gap:5px}
+  .signup-btn{
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    font-size:.8rem; font-weight:800; letter-spacing:.08em; line-height:1.1;
+    text-align:center; padding:6px 12px; min-width:72px; min-height:32px;
+    border:1px solid rgba(255,255,255,.4); border-radius:6px; color:#fff;
+    white-space:nowrap; background:rgba(255,255,255,.16); backdrop-filter:blur(8px);
+    text-transform:uppercase;
+  }
+  header.solid .signup-btn{border-color:var(--line); background:var(--indigo)}
   .lang-pill{display:flex; align-items:center; gap:5px; font-weight:600}
   .goods-badge{
-    display:flex; align-items:center; gap:6px; font-size:.66rem; font-weight:700;
-    letter-spacing:.03em; line-height:1.1; text-align:left; padding:5px 10px;
+    display:flex; align-items:center; justify-content:center; gap:6px; font-size:.66rem; font-weight:700;
+    letter-spacing:.03em; line-height:1.1; text-align:center; padding:5px 10px;
     border:1px solid rgba(255,255,255,.4); border-radius:6px;
+    min-width:68px; min-height:32px;
   }
   header.solid .goods-badge{border-color:var(--line)}
   .goods-badge .ico{width:16px; height:16px}
@@ -285,8 +296,29 @@
     font-size:.72rem; font-weight:700; letter-spacing:.14em;
     writing-mode:vertical-rl; text-orientation:mixed;
     box-shadow:var(--shadow);
+    border:none;
   }
   .quick-menu .ico{width:14px; height:14px; writing-mode:horizontal-tb}
+  #upcoming .more-btn,
+  #courses .more-btn,
+  #explore .more-btn{
+    top:18px;
+    right:var(--pad);
+  }
+  .quick-site-panel{
+    position:fixed; right:62px; top:calc(52% + 10px); z-index:39;
+    display:none; min-width:240px; padding:14px; border-radius:14px;
+    background:color-mix(in srgb, var(--surface) 96%, transparent);
+    box-shadow:var(--shadow); border:1px solid var(--line);
+    backdrop-filter:blur(10px);
+  }
+  .quick-site-panel.open{display:block}
+  .quick-site-panel a{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:10px 12px; border-radius:10px; color:var(--ink);
+    font-size:.92rem; font-weight:600;
+  }
+  .quick-site-panel a:hover{background:var(--bg-alt)}
   .scroll-top{
     position:fixed; right:22px; bottom:22px; z-index:40; width:46px; height:46px; border-radius:50%;
     background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow);
@@ -702,6 +734,7 @@
     </div>
   </div>
   <div class="head-actions">
+    <button class="signup-btn" aria-label="Join">JOIN</button>
     <button class="goods-badge" aria-label="천안 굿즈"><svg class="ico" viewBox="0 0 24 24"><use href="#i-gift"/></svg>CHEONAN<br>GOODS</button>
     <span class="weather-chip"><svg class="ico" viewBox="0 0 24 24"><use href="#i-cloud"/></svg>29.4°C</span>
     <button aria-label="검색"><svg class="ico" viewBox="0 0 24 24"><use href="#i-search"/></svg></button>
@@ -738,7 +771,12 @@
   </div>
 </div>
 
-<a class="quick-menu" href="#info">Quick Menu <svg class="ico" viewBox="0 0 24 24"><use href="#i-chev"/></svg></a>
+<button class="quick-menu" id="quickSiteBtn" type="button" aria-expanded="false" aria-controls="quickSitePanel">Quick <svg class="ico" viewBox="0 0 24 24"><use href="#i-chev"/></svg></button>
+<div class="quick-site-panel" id="quickSitePanel">
+  <a href="https://www.pyeongtaek.go.kr/tour/main.do" target="_blank" rel="noreferrer">평택문화관광 <svg class="ico" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+  <a href="https://www.cheonan.go.kr/tour/index.do" target="_blank" rel="noreferrer">천안시문화관광 <svg class="ico" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+  <a href="https://www.letskorail.com/" target="_blank" rel="noreferrer">코레일예매 <svg class="ico" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+</div>
 <button class="scroll-top" id="scrollTop" aria-label="맨 아래로"><svg class="ico" viewBox="0 0 24 24"><use href="#i-down" id="scrollTopIcon"/></svg></button>
 <a class="chat-fab" href="#info" aria-label="여행 문의"><svg class="ico" viewBox="0 0 24 24"><use href="#i-chat"/></svg></a>
 
@@ -767,8 +805,8 @@
 </section>
 
 <section class="section upcoming-tinted" id="upcoming">
-  <a class="more-btn" href="#upcoming" aria-label="더보기"><svg class="ico" viewBox="0 0 24 24"><use href="#i-plus"/></svg></a>
   <div class="wrap">
+    <a class="more-btn" href="#upcoming" aria-label="더보기"><svg class="ico" viewBox="0 0 24 24"><use href="#i-plus"/></svg></a>
     <div class="upc-head" data-reveal>
       <span class="eyebrow2">천안의 축제·전시·공연을 한눈에</span>
       <h2>ShowsUpdates</h2>
@@ -794,8 +832,8 @@
 </section>
 
 <section class="section upcoming-tinted" id="courses">
-  <a class="more-btn" href="#courses" aria-label="더보기"><svg class="ico" viewBox="0 0 24 24"><use href="#i-plus"/></svg></a>
   <div class="wrap">
+    <a class="more-btn" href="#courses" aria-label="더보기"><svg class="ico" viewBox="0 0 24 24"><use href="#i-plus"/></svg></a>
     <div class="upc-head" data-reveal>
       <span class="eyebrow2">짧은 영상으로 먼저 만나는 천안의 순간들</span>
       <h2>에디터 추천여행</h2>
@@ -860,8 +898,8 @@
 </section>
 
 <section class="section explore-tinted" id="explore">
-  <a class="more-btn" href="#explore" aria-label="더보기"><svg class="ico" viewBox="0 0 24 24"><use href="#i-plus"/></svg></a>
   <div class="wrap">
+    <a class="more-btn" href="#explore" aria-label="더보기"><svg class="ico" viewBox="0 0 24 24"><use href="#i-plus"/></svg></a>
     <div class="upc-head" data-reveal>
       <span class="eyebrow2">직접 다녀온 사람들의 진짜 후기</span>
       <h2>Discover Cheonan</h2>
@@ -1009,6 +1047,31 @@
     });
     menuOverlay.querySelectorAll('.menu-link').forEach(function(link){
       link.addEventListener('click', closeMenu);
+    });
+  }
+
+  var quickSiteBtn = document.getElementById('quickSiteBtn');
+  var quickSitePanel = document.getElementById('quickSitePanel');
+  if (quickSiteBtn && quickSitePanel){
+    function openQuickSite(){
+      quickSitePanel.classList.add('open');
+      quickSiteBtn.setAttribute('aria-expanded', 'true');
+    }
+    function closeQuickSite(){
+      quickSitePanel.classList.remove('open');
+      quickSiteBtn.setAttribute('aria-expanded', 'false');
+    }
+    quickSiteBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      quickSitePanel.classList.contains('open') ? closeQuickSite() : openQuickSite();
+    });
+    document.addEventListener('click', function(e){
+      if (!quickSitePanel.contains(e.target) && !quickSiteBtn.contains(e.target)){
+        closeQuickSite();
+      }
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') closeQuickSite();
     });
   }
 
