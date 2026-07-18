@@ -259,7 +259,42 @@
   }
   .auth-user-panel.open{display:block}
   .auth-user-email{font-size:.8rem; font-weight:700; margin:0 0 10px; word-break:break-all}
-  .auth-logout{font-size:.8rem; font-weight:700; color:var(--brick)}
+  .auth-mypage-link, .auth-logout{display:block; width:100%; text-align:left; font-size:.8rem; font-weight:700; padding:7px 0}
+  .auth-mypage-link{color:var(--indigo)}
+  .auth-logout{color:var(--brick); border-top:1px solid var(--line); margin-top:2px}
+
+  .mypage-modal{max-width:400px}
+  .mypage-summary{
+    display:flex; align-items:baseline; gap:8px; padding:16px 0;
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin-bottom:18px;
+  }
+  .mypage-count{font-family:var(--font-display); font-size:2rem; font-weight:700; color:var(--indigo)}
+  .mypage-count-label{font-size:.85rem; color:var(--ink-soft)}
+  .mypage-category{margin-bottom:16px}
+  .mypage-category:last-child{margin-bottom:0}
+  .mypage-category h4{font-size:.85rem; font-weight:800; color:var(--ink); margin:0 0 8px; display:flex; justify-content:space-between}
+  .mypage-category h4 .cnt{color:var(--gold)}
+  .mypage-category ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px}
+  .mypage-category li{font-size:.85rem; color:var(--ink-soft); padding-left:14px; position:relative}
+  .mypage-category li::before{content:''; position:absolute; left:0; top:.55em; width:5px; height:5px; border-radius:50%; background:var(--gold-soft)}
+  .mypage-empty{font-size:.85rem; color:var(--ink-faint); text-align:center; padding:14px 0}
+
+  .auth-toast{
+    position:fixed; top:20px; left:50%; z-index:300;
+    display:flex; align-items:center; gap:12px;
+    background:var(--surface); color:var(--ink); border:1px solid var(--line); border-radius:12px;
+    box-shadow:var(--shadow); padding:14px 16px; font-size:.88rem; font-weight:700;
+    opacity:0; visibility:hidden; transform:translateX(-50%) translateY(-12px);
+    transition:opacity .3s ease, transform .3s ease, visibility 0s linear .3s;
+  }
+  .auth-toast.show{
+    opacity:1; visibility:visible; transform:translateX(-50%) translateY(0);
+    transition:opacity .3s ease, transform .3s ease, visibility 0s;
+  }
+  .auth-toast-close{display:flex; align-items:center; justify-content:center; width:22px; height:22px; color:var(--ink-faint); flex:0 0 auto}
+  .auth-toast-close:hover{color:var(--indigo)}
+  .auth-toast-close .ico{width:14px; height:14px}
+  @media (prefers-reduced-motion: reduce){ .auth-toast{transition:none} }
 
   .auth-overlay{
     position:fixed; inset:0; z-index:200; display:flex; align-items:center; justify-content:center;
@@ -816,6 +851,7 @@
       <button type="button" class="signup-btn" id="authToggle" aria-label="Join" aria-expanded="false" aria-controls="authUserPanel">JOIN</button>
       <div class="auth-user-panel" id="authUserPanel">
         <p class="auth-user-email" id="authUserEmail"></p>
+        <button type="button" class="auth-mypage-link" id="authMypageBtn">마이페이지</button>
         <button type="button" class="auth-logout" id="authLogout">로그아웃</button>
       </div>
     </div>
@@ -913,6 +949,24 @@
 
     <p class="auth-switch" id="authSwitch">아직 계정이 없으신가요? <button type="button" id="authSwitchBtn">회원가입</button></p>
   </div>
+</div>
+
+<div class="auth-overlay" id="mypageOverlay">
+  <div class="auth-modal mypage-modal" role="dialog" aria-modal="true" aria-labelledby="mypageTitle">
+    <button type="button" class="auth-close" id="mypageClose" aria-label="닫기"><svg class="ico" viewBox="0 0 24 24"><use href="#i-close"/></svg></button>
+    <h2 class="auth-title" id="mypageTitle">마이페이지</h2>
+    <p class="auth-sub" id="mypageEmail"></p>
+    <div class="mypage-summary">
+      <span class="mypage-count" id="mypageTotalCount">0</span>
+      <span class="mypage-count-label">개의 게시물을 찜했어요</span>
+    </div>
+    <div class="mypage-categories" id="mypageCategories"></div>
+  </div>
+</div>
+
+<div class="auth-toast" id="authToast" role="status" aria-live="polite">
+  <span id="authToastMsg"></span>
+  <button type="button" class="auth-toast-close" id="authToastClose" aria-label="닫기"><svg class="ico" viewBox="0 0 24 24"><use href="#i-close"/></svg></button>
 </div>
 
 <button class="scroll-top" id="scrollTop" aria-label="맨 아래로"><svg class="ico" viewBox="0 0 24 24"><use href="#i-down" id="scrollTopIcon"/></svg></button>
@@ -1048,7 +1102,7 @@
         <div class="photo-art">
           <div class="scene-valley photo-real-1"></div>
           <span class="cat-badge">볼거리</span>
-          <button class="heart-btn" aria-label="찜하기">
+          <button class="heart-btn" aria-label="찜하기" data-item-id="gwangdeoksan" data-title="광덕산 자연휴양림" data-category="볼거리">
             <svg class="ico heart-outline" viewBox="0 0 24 24"><use href="#i-heart"/></svg>
             <svg class="ico heart-filled" viewBox="0 0 24 24"><use href="#i-heart-fill"/></svg>
           </button>
@@ -1063,7 +1117,7 @@
         <div class="photo-art">
           <div class="scene-lake photo-real-2"></div>
           <span class="cat-badge">볼거리</span>
-          <button class="heart-btn" aria-label="찜하기">
+          <button class="heart-btn" aria-label="찜하기" data-item-id="gakwonsa" data-title="각원사 청동대불" data-category="볼거리">
             <svg class="ico heart-outline" viewBox="0 0 24 24"><use href="#i-heart"/></svg>
             <svg class="ico heart-filled" viewBox="0 0 24 24"><use href="#i-heart-fill"/></svg>
           </button>
@@ -1078,7 +1132,7 @@
         <div class="photo-art">
           <div class="scene-bridge photo-real-3"></div>
           <span class="cat-badge">볼거리</span>
-          <button class="heart-btn" aria-label="찜하기">
+          <button class="heart-btn" aria-label="찜하기" data-item-id="wonseongcheon" data-title="원성천 물빛다리" data-category="볼거리">
             <svg class="ico heart-outline" viewBox="0 0 24 24"><use href="#i-heart"/></svg>
             <svg class="ico heart-filled" viewBox="0 0 24 24"><use href="#i-heart-fill"/></svg>
           </button>
@@ -1093,7 +1147,7 @@
         <div class="photo-art">
           <div class="photo-sundae"></div>
           <span class="cat-badge">먹거리</span>
-          <button class="heart-btn" aria-label="찜하기">
+          <button class="heart-btn" aria-label="찜하기" data-item-id="byeongcheon-sundae" data-title="병천 순대국밥집" data-category="먹거리">
             <svg class="ico heart-outline" viewBox="0 0 24 24"><use href="#i-heart"/></svg>
             <svg class="ico heart-filled" viewBox="0 0 24 24"><use href="#i-heart-fill"/></svg>
           </button>
@@ -1224,14 +1278,6 @@
     setInterval(renderHeaderDate, 60000);
   }
 
-  // review card heart toggle
-  document.querySelectorAll('.heart-btn').forEach(function(btn){
-    btn.addEventListener('click', function(e){
-      e.preventDefault();
-      btn.classList.toggle('active');
-    });
-  });
-
   // full-screen menu overlay
   var menuBtn = document.getElementById('menuBtn');
   var menuOverlay = document.getElementById('menuOverlay');
@@ -1299,11 +1345,22 @@
     var errorLogin = document.getElementById('authErrorLogin');
     var errorSignup = document.getElementById('authErrorSignup');
     var authSwitch = document.getElementById('authSwitch');
+    var authMypageBtn = document.getElementById('authMypageBtn');
+    var mypageOverlay = document.getElementById('mypageOverlay');
+    var mypageClose = document.getElementById('mypageClose');
+    var mypageEmail = document.getElementById('mypageEmail');
+    var mypageTotalCount = document.getElementById('mypageTotalCount');
+    var mypageCategories = document.getElementById('mypageCategories');
+    var heartBtns = document.querySelectorAll('.heart-btn');
+    var authToast = document.getElementById('authToast');
+    var authToastMsg = document.getElementById('authToastMsg');
+    var authToastClose = document.getElementById('authToastClose');
     if (!authToggle || !authOverlay || !window.supabase) return;
 
     var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     var currentUser = null;
+    var myFavorites = [];
 
     function setMessage(el, msg, isSuccess){
       el.textContent = msg || '';
@@ -1327,6 +1384,70 @@
         authToggle.classList.remove('is-logged-in');
         closeUserPanel();
       }
+    }
+
+    function escapeHtml(str){
+      var div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function loadFavorites(){
+      if (!currentUser){
+        myFavorites = [];
+        heartBtns.forEach(function(btn){ btn.classList.remove('active'); });
+        return;
+      }
+      supabaseClient.from('favorites').select('item_id, title, category').eq('user_id', currentUser.id).then(function(res){
+        myFavorites = res.data || [];
+        var likedIds = myFavorites.map(function(f){ return f.item_id; });
+        heartBtns.forEach(function(btn){
+          btn.classList.toggle('active', likedIds.indexOf(btn.dataset.itemId) !== -1);
+        });
+      });
+    }
+
+    function renderMypage(){
+      mypageEmail.textContent = currentUser ? currentUser.email : '';
+      mypageTotalCount.textContent = myFavorites.length;
+      var byCategory = {};
+      myFavorites.forEach(function(f){
+        if (!byCategory[f.category]) byCategory[f.category] = [];
+        byCategory[f.category].push(f.title);
+      });
+      var categories = Object.keys(byCategory);
+      if (categories.length === 0){
+        mypageCategories.innerHTML = '<p class="mypage-empty">아직 찜한 게시물이 없어요. 마음에 드는 곳에 하트를 눌러보세요!</p>';
+        return;
+      }
+      mypageCategories.innerHTML = categories.map(function(cat){
+        var titles = byCategory[cat];
+        var items = titles.map(function(t){ return '<li>' + escapeHtml(t) + '</li>'; }).join('');
+        return '<div class="mypage-category"><h4><span>' + escapeHtml(cat) + '</span><span class="cnt">' + titles.length + '개</span></h4><ul>' + items + '</ul></div>';
+      }).join('');
+    }
+
+    function openMypage(){
+      if (!currentUser) return;
+      renderMypage();
+      mypageOverlay.classList.add('open');
+    }
+    function closeMypage(){
+      if (mypageOverlay) mypageOverlay.classList.remove('open');
+    }
+
+    var toastTimer = null;
+    function showToast(msg){
+      if (!authToast) return;
+      authToastMsg.textContent = msg;
+      authToast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(hideToast, 4000);
+    }
+    function hideToast(){
+      if (!authToast) return;
+      authToast.classList.remove('show');
+      clearTimeout(toastTimer);
     }
 
     function switchTab(tab){
@@ -1382,10 +1503,42 @@
       }
     });
     document.addEventListener('keydown', function(e){
-      if (e.key === 'Escape'){ closeAuthModal(); closeUserPanel(); }
+      if (e.key === 'Escape'){ closeAuthModal(); closeUserPanel(); closeMypage(); hideToast(); }
     });
     if (tabLogin) tabLogin.addEventListener('click', function(){ switchTab('login'); });
     if (tabSignup) tabSignup.addEventListener('click', function(){ switchTab('signup'); });
+
+    if (authMypageBtn) authMypageBtn.addEventListener('click', function(){
+      closeUserPanel();
+      openMypage();
+    });
+    if (mypageClose) mypageClose.addEventListener('click', closeMypage);
+    if (mypageOverlay) mypageOverlay.addEventListener('click', function(e){
+      if (e.target === mypageOverlay) closeMypage();
+    });
+    if (authToastClose) authToastClose.addEventListener('click', hideToast);
+
+    heartBtns.forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        if (!currentUser){
+          openAuthModal('login');
+          return;
+        }
+        var itemId = btn.dataset.itemId;
+        var wasActive = btn.classList.contains('active');
+        btn.classList.toggle('active');
+        btn.disabled = true;
+        var request = wasActive
+          ? supabaseClient.from('favorites').delete().eq('user_id', currentUser.id).eq('item_id', itemId)
+          : supabaseClient.from('favorites').insert({ user_id: currentUser.id, item_id: itemId, title: btn.dataset.title, category: btn.dataset.category });
+        request.then(function(res){
+          btn.disabled = false;
+          if (res.error){ btn.classList.toggle('active'); return; }
+          loadFavorites();
+        });
+      });
+    });
 
     formLogin.addEventListener('submit', function(e){
       e.preventDefault();
@@ -1420,7 +1573,9 @@
         if (res.error){ setMessage(errorSignup, friendlyError(res.error)); return; }
         formSignup.reset();
         if (res.data && res.data.session){
+          var displayName = res.data.session.user.email.split('@')[0];
           closeAuthModal();
+          showToast(displayName + '님 가입되었습니다.');
         } else {
           setMessage(errorSignup, '가입 확인 이메일을 보냈습니다. 메일함을 확인한 뒤 로그인해주세요.', true);
         }
@@ -1435,10 +1590,12 @@
     supabaseClient.auth.onAuthStateChange(function(event, session){
       currentUser = session ? session.user : null;
       renderAuthState(currentUser);
+      loadFavorites();
     });
     supabaseClient.auth.getSession().then(function(res){
       currentUser = res.data && res.data.session ? res.data.session.user : null;
       renderAuthState(currentUser);
+      loadFavorites();
     });
   })();
 
