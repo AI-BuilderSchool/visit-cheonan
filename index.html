@@ -292,6 +292,8 @@
   }
   .auth-field input:focus{outline:none; border-color:var(--indigo)}
   .auth-error{font-size:.78rem; color:var(--brick); margin:-6px 0 12px; min-height:1em}
+  .auth-error.is-success{color:var(--sage)}
+  .auth-submit:disabled{opacity:.6; cursor:default}
   .auth-submit{width:100%; padding:13px; border-radius:9px; background:var(--indigo); color:#fff; font-weight:800; font-size:.94rem; letter-spacing:.02em; transition:background .2s}
   .auth-submit:hover{background:var(--indigo-soft)}
   .auth-switch{text-align:center; font-size:.82rem; color:var(--ink-soft); margin-top:16px}
@@ -890,7 +892,7 @@
       </div>
       <div class="auth-field">
         <svg class="ico" viewBox="0 0 24 24"><use href="#i-lock"/></svg>
-        <input type="password" name="password" placeholder="비밀번호" required minlength="4" autocomplete="current-password">
+        <input type="password" name="password" placeholder="비밀번호" required minlength="6" autocomplete="current-password">
       </div>
       <p class="auth-error" id="authErrorLogin"></p>
       <button type="submit" class="auth-submit">로그인</button>
@@ -898,16 +900,12 @@
 
     <form class="auth-panel" id="authFormSignup" hidden novalidate>
       <div class="auth-field">
-        <svg class="ico" viewBox="0 0 24 24"><use href="#i-user"/></svg>
-        <input type="text" name="name" placeholder="이름" required autocomplete="name">
-      </div>
-      <div class="auth-field">
         <svg class="ico" viewBox="0 0 24 24"><use href="#i-mail"/></svg>
         <input type="email" name="email" placeholder="이메일" required autocomplete="email">
       </div>
       <div class="auth-field">
         <svg class="ico" viewBox="0 0 24 24"><use href="#i-lock"/></svg>
-        <input type="password" name="password" placeholder="비밀번호 (4자 이상)" required minlength="4" autocomplete="new-password">
+        <input type="password" name="password" placeholder="비밀번호 (6자 이상)" required minlength="6" autocomplete="new-password">
       </div>
       <p class="auth-error" id="authErrorSignup"></p>
       <button type="submit" class="auth-submit">회원가입</button>
@@ -1147,6 +1145,7 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
   var header = document.getElementById('siteHeader');
@@ -1283,9 +1282,10 @@
     });
   }
 
-  // login / signup modal (front-end 목업, 실제 인증 서버 없음 — localStorage에만 저장)
+  // login / signup / logout (Supabase Auth, CDN 클라이언트 — 빌드 도구 없음)
   (function(){
-    var AUTH_KEY = 'visitLocalUser';
+    var SUPABASE_URL = 'https://fwxucmkwhxakkhpjzvyu.supabase.co';
+    var SUPABASE_ANON_KEY = 'sb_publishable_1xz6RFenbcEYarVGWOBsAw_0JsXq_xz';
     var authToggle = document.getElementById('authToggle');
     var authOverlay = document.getElementById('authOverlay');
     var authClose = document.getElementById('authClose');
@@ -1299,17 +1299,27 @@
     var errorLogin = document.getElementById('authErrorLogin');
     var errorSignup = document.getElementById('authErrorSignup');
     var authSwitch = document.getElementById('authSwitch');
-    if (!authToggle || !authOverlay) return;
+    if (!authToggle || !authOverlay || !window.supabase) return;
 
+    var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    var currentUser = null;
 
-    function getUser(){
-      try { return JSON.parse(localStorage.getItem(AUTH_KEY)); } catch(e){ return null; }
+    function setMessage(el, msg, isSuccess){
+      el.textContent = msg || '';
+      el.classList.toggle('is-success', !!isSuccess);
     }
-    function renderAuthState(){
-      var user = getUser();
+    function friendlyError(err){
+      var msg = (err && err.message) || '';
+      if (msg.indexOf('Invalid login credentials') !== -1) return '이메일 또는 비밀번호가 올바르지 않습니다.';
+      if (msg.indexOf('already registered') !== -1 || msg.indexOf('already exists') !== -1) return '이미 가입된 이메일입니다.';
+      if (msg.indexOf('Password should be at least') !== -1) return '비밀번호는 6자 이상이어야 합니다.';
+      return msg || '요청을 처리하지 못했습니다. 잠시 후 다시 시도해주세요.';
+    }
+
+    function renderAuthState(user){
       if (user){
-        authToggle.textContent = user.name || user.email.split('@')[0];
+        authToggle.textContent = user.email;
         authToggle.classList.add('is-logged-in');
         if (authUserEmail) authUserEmail.textContent = user.email;
       } else {
@@ -1318,14 +1328,6 @@
         closeUserPanel();
       }
     }
-    function setUser(user){
-      localStorage.setItem(AUTH_KEY, JSON.stringify(user));
-      renderAuthState();
-    }
-    function clearUser(){
-      localStorage.removeItem(AUTH_KEY);
-      renderAuthState();
-    }
 
     function switchTab(tab){
       var isLogin = tab === 'login';
@@ -1333,8 +1335,8 @@
       tabSignup.classList.toggle('active', !isLogin);
       formLogin.hidden = !isLogin;
       formSignup.hidden = isLogin;
-      errorLogin.textContent = '';
-      errorSignup.textContent = '';
+      setMessage(errorLogin, '');
+      setMessage(errorSignup, '');
       authSwitch.innerHTML = isLogin
         ? '아직 계정이 없으신가요? <button type="button" id="authSwitchBtn">회원가입</button>'
         : '이미 계정이 있으신가요? <button type="button" id="authSwitchBtn">로그인</button>';
@@ -1364,7 +1366,7 @@
 
     authToggle.addEventListener('click', function(e){
       e.stopPropagation();
-      if (getUser()){
+      if (currentUser){
         authUserPanel.classList.contains('open') ? closeUserPanel() : openUserPanel();
       } else {
         openAuthModal('login');
@@ -1390,33 +1392,54 @@
       var data = new FormData(formLogin);
       var email = String(data.get('email') || '').trim();
       var password = String(data.get('password') || '');
-      if (!EMAIL_RE.test(email)) { errorLogin.textContent = '올바른 이메일 형식을 입력해주세요.'; return; }
-      if (password.length < 4) { errorLogin.textContent = '비밀번호는 4자 이상이어야 합니다.'; return; }
-      setUser({ email: email, name: email.split('@')[0] });
-      formLogin.reset();
-      closeAuthModal();
+      if (!EMAIL_RE.test(email)) { setMessage(errorLogin, '올바른 이메일 형식을 입력해주세요.'); return; }
+      if (password.length < 6) { setMessage(errorLogin, '비밀번호는 6자 이상이어야 합니다.'); return; }
+      var submitBtn = formLogin.querySelector('.auth-submit');
+      submitBtn.disabled = true;
+      setMessage(errorLogin, '');
+      supabaseClient.auth.signInWithPassword({ email: email, password: password }).then(function(res){
+        submitBtn.disabled = false;
+        if (res.error){ setMessage(errorLogin, friendlyError(res.error)); return; }
+        formLogin.reset();
+        closeAuthModal();
+      });
     });
 
     formSignup.addEventListener('submit', function(e){
       e.preventDefault();
       var data = new FormData(formSignup);
-      var name = String(data.get('name') || '').trim();
       var email = String(data.get('email') || '').trim();
       var password = String(data.get('password') || '');
-      if (!name) { errorSignup.textContent = '이름을 입력해주세요.'; return; }
-      if (!EMAIL_RE.test(email)) { errorSignup.textContent = '올바른 이메일 형식을 입력해주세요.'; return; }
-      if (password.length < 4) { errorSignup.textContent = '비밀번호는 4자 이상이어야 합니다.'; return; }
-      setUser({ email: email, name: name });
-      formSignup.reset();
-      closeAuthModal();
+      if (!EMAIL_RE.test(email)) { setMessage(errorSignup, '올바른 이메일 형식을 입력해주세요.'); return; }
+      if (password.length < 6) { setMessage(errorSignup, '비밀번호는 6자 이상이어야 합니다.'); return; }
+      var submitBtn = formSignup.querySelector('.auth-submit');
+      submitBtn.disabled = true;
+      setMessage(errorSignup, '');
+      supabaseClient.auth.signUp({ email: email, password: password }).then(function(res){
+        submitBtn.disabled = false;
+        if (res.error){ setMessage(errorSignup, friendlyError(res.error)); return; }
+        formSignup.reset();
+        if (res.data && res.data.session){
+          closeAuthModal();
+        } else {
+          setMessage(errorSignup, '가입 확인 이메일을 보냈습니다. 메일함을 확인한 뒤 로그인해주세요.', true);
+        }
+      });
     });
 
     if (authLogout) authLogout.addEventListener('click', function(){
-      clearUser();
+      supabaseClient.auth.signOut();
       closeUserPanel();
     });
 
-    renderAuthState();
+    supabaseClient.auth.onAuthStateChange(function(event, session){
+      currentUser = session ? session.user : null;
+      renderAuthState(currentUser);
+    });
+    supabaseClient.auth.getSession().then(function(res){
+      currentUser = res.data && res.data.session ? res.data.session.user : null;
+      renderAuthState(currentUser);
+    });
   })();
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
