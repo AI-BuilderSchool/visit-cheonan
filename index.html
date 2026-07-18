@@ -249,19 +249,9 @@
   @media (max-width:480px){ .weather-panel{right:-30px} }
 
   .auth-widget{position:relative; display:inline-flex; align-items:center}
-  .signup-btn.is-logged-in{text-transform:none; letter-spacing:.01em; max-width:120px; overflow:hidden; text-overflow:ellipsis}
-  .auth-user-panel{
-    position:absolute; right:0; top:calc(100% + 10px); z-index:60;
-    display:none; min-width:180px; padding:14px 16px; border-radius:14px;
-    background:color-mix(in srgb, var(--surface) 96%, transparent);
-    box-shadow:var(--shadow); border:1px solid var(--line);
-    backdrop-filter:blur(10px); text-align:left; color:var(--ink);
-  }
-  .auth-user-panel.open{display:block}
-  .auth-user-email{font-size:.8rem; font-weight:700; margin:0 0 10px; word-break:break-all}
-  .auth-mypage-link, .auth-logout{display:block; width:100%; text-align:left; font-size:.8rem; font-weight:700; padding:7px 0}
-  .auth-mypage-link{color:var(--indigo)}
-  .auth-logout{color:var(--brick); border-top:1px solid var(--line); margin-top:2px}
+  .signup-btn.is-logged-in{text-transform:none; letter-spacing:.01em}
+  .auth-logout{font-size:.8rem; font-weight:700; color:var(--brick)}
+  .mypage-logout{display:block; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); width:100%; text-align:left}
 
   .mypage-modal{max-width:400px}
   .mypage-summary{
@@ -848,12 +838,7 @@
   </div>
   <div class="head-actions">
     <div class="auth-widget">
-      <button type="button" class="signup-btn" id="authToggle" aria-label="Join" aria-expanded="false" aria-controls="authUserPanel">JOIN</button>
-      <div class="auth-user-panel" id="authUserPanel">
-        <p class="auth-user-email" id="authUserEmail"></p>
-        <button type="button" class="auth-mypage-link" id="authMypageBtn">마이페이지</button>
-        <button type="button" class="auth-logout" id="authLogout">로그아웃</button>
-      </div>
+      <button type="button" class="signup-btn" id="authToggle" aria-label="Join">JOIN</button>
     </div>
     <button class="goods-badge" aria-label="내 지역 굿즈"><svg class="ico" viewBox="0 0 24 24"><use href="#i-gift"/></svg>LOCAL<br>GOODS</button>
     <div class="weather-widget">
@@ -961,6 +946,7 @@
       <span class="mypage-count-label">개의 게시물을 찜했어요</span>
     </div>
     <div class="mypage-categories" id="mypageCategories"></div>
+    <button type="button" class="auth-logout mypage-logout" id="authLogout">로그아웃</button>
   </div>
 </div>
 
@@ -1335,8 +1321,6 @@
     var authToggle = document.getElementById('authToggle');
     var authOverlay = document.getElementById('authOverlay');
     var authClose = document.getElementById('authClose');
-    var authUserPanel = document.getElementById('authUserPanel');
-    var authUserEmail = document.getElementById('authUserEmail');
     var authLogout = document.getElementById('authLogout');
     var tabLogin = document.getElementById('authTabLogin');
     var tabSignup = document.getElementById('authTabSignup');
@@ -1345,7 +1329,6 @@
     var errorLogin = document.getElementById('authErrorLogin');
     var errorSignup = document.getElementById('authErrorSignup');
     var authSwitch = document.getElementById('authSwitch');
-    var authMypageBtn = document.getElementById('authMypageBtn');
     var mypageOverlay = document.getElementById('mypageOverlay');
     var mypageClose = document.getElementById('mypageClose');
     var mypageEmail = document.getElementById('mypageEmail');
@@ -1376,13 +1359,13 @@
 
     function renderAuthState(user){
       if (user){
-        authToggle.textContent = user.email;
+        authToggle.textContent = 'MYPAGE';
+        authToggle.setAttribute('aria-label', '마이페이지');
         authToggle.classList.add('is-logged-in');
-        if (authUserEmail) authUserEmail.textContent = user.email;
       } else {
         authToggle.textContent = 'JOIN';
+        authToggle.setAttribute('aria-label', 'Join');
         authToggle.classList.remove('is-logged-in');
-        closeUserPanel();
       }
     }
 
@@ -1476,19 +1459,10 @@
     function closeAuthModal(){
       authOverlay.classList.remove('open');
     }
-    function openUserPanel(){
-      authUserPanel.classList.add('open');
-      authToggle.setAttribute('aria-expanded', 'true');
-    }
-    function closeUserPanel(){
-      authUserPanel.classList.remove('open');
-      authToggle.setAttribute('aria-expanded', 'false');
-    }
 
-    authToggle.addEventListener('click', function(e){
-      e.stopPropagation();
+    authToggle.addEventListener('click', function(){
       if (currentUser){
-        authUserPanel.classList.contains('open') ? closeUserPanel() : openUserPanel();
+        openMypage();
       } else {
         openAuthModal('login');
       }
@@ -1497,21 +1471,12 @@
     authOverlay.addEventListener('click', function(e){
       if (e.target === authOverlay) closeAuthModal();
     });
-    document.addEventListener('click', function(e){
-      if (authUserPanel && !authUserPanel.contains(e.target) && !authToggle.contains(e.target)){
-        closeUserPanel();
-      }
-    });
     document.addEventListener('keydown', function(e){
-      if (e.key === 'Escape'){ closeAuthModal(); closeUserPanel(); closeMypage(); hideToast(); }
+      if (e.key === 'Escape'){ closeAuthModal(); closeMypage(); hideToast(); }
     });
     if (tabLogin) tabLogin.addEventListener('click', function(){ switchTab('login'); });
     if (tabSignup) tabSignup.addEventListener('click', function(){ switchTab('signup'); });
 
-    if (authMypageBtn) authMypageBtn.addEventListener('click', function(){
-      closeUserPanel();
-      openMypage();
-    });
     if (mypageClose) mypageClose.addEventListener('click', closeMypage);
     if (mypageOverlay) mypageOverlay.addEventListener('click', function(e){
       if (e.target === mypageOverlay) closeMypage();
@@ -1584,7 +1549,7 @@
 
     if (authLogout) authLogout.addEventListener('click', function(){
       supabaseClient.auth.signOut();
-      closeUserPanel();
+      closeMypage();
     });
 
     supabaseClient.auth.onAuthStateChange(function(event, session){
