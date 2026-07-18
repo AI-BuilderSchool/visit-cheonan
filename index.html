@@ -39,6 +39,9 @@
     <symbol id="i-suitcase" viewBox="0 0 24 24"><rect x="3.5" y="8" width="17" height="12" rx="1.6" fill="#FBDDC2" stroke="currentColor" stroke-width="1.4"/><path d="M9 8V5.6A1.6 1.6 0 0 1 10.6 4h2.8A1.6 1.6 0 0 1 15 5.6V8" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M3.5 13h17" stroke="currentColor" stroke-width="1"/><circle cx="7.3" cy="16.3" r="1" fill="#FF7A29"/></symbol>
     <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.3 7-11.6A7 7 0 0 0 5 9.4C5 14.7 12 21 12 21Z" fill="#FBDDC2" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="12" cy="9.2" r="2.7" fill="#FF7A29"/></symbol>
     <symbol id="i-wave" viewBox="0 0 24 24"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m4 6.5 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7.5 10.5V7.5a4.5 4.5 0 0 1 9 0v3" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 20c1.3-3.8 4.3-5.8 7.5-5.8s6.2 2 7.5 5.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
   </defs>
 </svg>
 
@@ -244,6 +247,57 @@
   .weather-panel-grid li{display:flex; justify-content:space-between; gap:16px; font-size:.78rem; color:var(--ink-soft)}
   .weather-panel-grid .wp-value{font-weight:700; color:var(--ink); font-variant-numeric:tabular-nums}
   @media (max-width:480px){ .weather-panel{right:-30px} }
+
+  .auth-widget{position:relative; display:inline-flex; align-items:center}
+  .signup-btn.is-logged-in{text-transform:none; letter-spacing:.01em; max-width:120px; overflow:hidden; text-overflow:ellipsis}
+  .auth-user-panel{
+    position:absolute; right:0; top:calc(100% + 10px); z-index:60;
+    display:none; min-width:180px; padding:14px 16px; border-radius:14px;
+    background:color-mix(in srgb, var(--surface) 96%, transparent);
+    box-shadow:var(--shadow); border:1px solid var(--line);
+    backdrop-filter:blur(10px); text-align:left; color:var(--ink);
+  }
+  .auth-user-panel.open{display:block}
+  .auth-user-email{font-size:.8rem; font-weight:700; margin:0 0 10px; word-break:break-all}
+  .auth-logout{font-size:.8rem; font-weight:700; color:var(--brick)}
+
+  .auth-overlay{
+    position:fixed; inset:0; z-index:200; display:flex; align-items:center; justify-content:center;
+    padding:20px; background:rgba(18,15,10,.55); backdrop-filter:blur(4px);
+    opacity:0; visibility:hidden; transition:opacity .3s ease, visibility 0s linear .3s;
+  }
+  .auth-overlay.open{opacity:1; visibility:visible; transition:opacity .3s ease, visibility 0s}
+  .auth-modal{
+    width:100%; max-width:380px; background:var(--surface); border-radius:16px; box-shadow:var(--shadow);
+    padding:32px 28px 28px; position:relative; color:var(--ink);
+    transform:translateY(12px); transition:transform .3s ease;
+  }
+  .auth-overlay.open .auth-modal{transform:none}
+  .auth-close{
+    position:absolute; top:16px; right:16px; width:34px; height:34px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; color:var(--ink-soft);
+  }
+  .auth-close:hover{color:var(--indigo); background:var(--bg-alt)}
+  .auth-close .ico{width:16px; height:16px}
+  .auth-title{font-family:var(--font-display); font-size:1.5rem; margin:0 0 4px}
+  .auth-sub{font-size:.85rem; color:var(--ink-soft); margin:0 0 22px}
+  .auth-tabs{display:flex; gap:4px; margin-bottom:22px; padding:4px; background:var(--bg-alt); border-radius:10px}
+  .auth-tab{flex:1; padding:9px; border-radius:7px; font-size:.85rem; font-weight:700; color:var(--ink-soft); text-align:center}
+  .auth-tab.active{background:var(--surface); color:var(--indigo); box-shadow:0 2px 6px rgba(0,0,0,.08)}
+  .auth-field{position:relative; margin-bottom:14px}
+  .auth-field .ico{position:absolute; left:14px; top:50%; transform:translateY(-50%); width:16px; height:16px; color:var(--ink-faint)}
+  .auth-field input{
+    width:100%; padding:12px 14px 12px 40px; border:1.5px solid var(--line); border-radius:9px;
+    background:var(--bg); color:var(--ink); font:inherit; font-size:.92rem;
+  }
+  .auth-field input:focus{outline:none; border-color:var(--indigo)}
+  .auth-error{font-size:.78rem; color:var(--brick); margin:-6px 0 12px; min-height:1em}
+  .auth-submit{width:100%; padding:13px; border-radius:9px; background:var(--indigo); color:#fff; font-weight:800; font-size:.94rem; letter-spacing:.02em; transition:background .2s}
+  .auth-submit:hover{background:var(--indigo-soft)}
+  .auth-switch{text-align:center; font-size:.82rem; color:var(--ink-soft); margin-top:16px}
+  .auth-switch button{color:var(--indigo); font-weight:700}
+  .auth-panel[hidden]{display:none}
+  @media (prefers-reduced-motion: reduce){ .auth-overlay, .auth-modal{transition:none} }
 
   /* ---------- hero ---------- */
   .hero{
@@ -756,7 +810,13 @@
     </div>
   </div>
   <div class="head-actions">
-    <button class="signup-btn" aria-label="Join">JOIN</button>
+    <div class="auth-widget">
+      <button type="button" class="signup-btn" id="authToggle" aria-label="Join" aria-expanded="false" aria-controls="authUserPanel">JOIN</button>
+      <div class="auth-user-panel" id="authUserPanel">
+        <p class="auth-user-email" id="authUserEmail"></p>
+        <button type="button" class="auth-logout" id="authLogout">로그아웃</button>
+      </div>
+    </div>
     <button class="goods-badge" aria-label="내 지역 굿즈"><svg class="ico" viewBox="0 0 24 24"><use href="#i-gift"/></svg>LOCAL<br>GOODS</button>
     <div class="weather-widget">
       <button type="button" class="weather-chip" id="weatherToggle" aria-expanded="false" aria-controls="weatherPanel">
@@ -812,6 +872,51 @@
   <a href="https://www.cheonan.go.kr/tour/index.do" target="_blank" rel="noreferrer">천안시문화관광 <svg class="ico" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
   <a href="https://www.letskorail.com/" target="_blank" rel="noreferrer">코레일예매 <svg class="ico" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
 </div>
+
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <button type="button" class="auth-close" id="authClose" aria-label="닫기"><svg class="ico" viewBox="0 0 24 24"><use href="#i-close"/></svg></button>
+    <h2 class="auth-title" id="authTitle">내 지역과 함께하기</h2>
+    <p class="auth-sub">로그인하고 찜한 여행지와 추천 코스를 저장하세요</p>
+    <div class="auth-tabs">
+      <button type="button" class="auth-tab active" id="authTabLogin" data-tab="login">로그인</button>
+      <button type="button" class="auth-tab" id="authTabSignup" data-tab="signup">회원가입</button>
+    </div>
+
+    <form class="auth-panel" id="authFormLogin" novalidate>
+      <div class="auth-field">
+        <svg class="ico" viewBox="0 0 24 24"><use href="#i-mail"/></svg>
+        <input type="email" name="email" placeholder="이메일" required autocomplete="email">
+      </div>
+      <div class="auth-field">
+        <svg class="ico" viewBox="0 0 24 24"><use href="#i-lock"/></svg>
+        <input type="password" name="password" placeholder="비밀번호" required minlength="4" autocomplete="current-password">
+      </div>
+      <p class="auth-error" id="authErrorLogin"></p>
+      <button type="submit" class="auth-submit">로그인</button>
+    </form>
+
+    <form class="auth-panel" id="authFormSignup" hidden novalidate>
+      <div class="auth-field">
+        <svg class="ico" viewBox="0 0 24 24"><use href="#i-user"/></svg>
+        <input type="text" name="name" placeholder="이름" required autocomplete="name">
+      </div>
+      <div class="auth-field">
+        <svg class="ico" viewBox="0 0 24 24"><use href="#i-mail"/></svg>
+        <input type="email" name="email" placeholder="이메일" required autocomplete="email">
+      </div>
+      <div class="auth-field">
+        <svg class="ico" viewBox="0 0 24 24"><use href="#i-lock"/></svg>
+        <input type="password" name="password" placeholder="비밀번호 (4자 이상)" required minlength="4" autocomplete="new-password">
+      </div>
+      <p class="auth-error" id="authErrorSignup"></p>
+      <button type="submit" class="auth-submit">회원가입</button>
+    </form>
+
+    <p class="auth-switch" id="authSwitch">아직 계정이 없으신가요? <button type="button" id="authSwitchBtn">회원가입</button></p>
+  </div>
+</div>
+
 <button class="scroll-top" id="scrollTop" aria-label="맨 아래로"><svg class="ico" viewBox="0 0 24 24"><use href="#i-down" id="scrollTopIcon"/></svg></button>
 <a class="chat-fab" href="#info" aria-label="여행 문의"><svg class="ico" viewBox="0 0 24 24"><use href="#i-chat"/></svg></a>
 
@@ -1177,6 +1282,142 @@
       if (e.key === 'Escape') closeQuickSite();
     });
   }
+
+  // login / signup modal (front-end 목업, 실제 인증 서버 없음 — localStorage에만 저장)
+  (function(){
+    var AUTH_KEY = 'visitLocalUser';
+    var authToggle = document.getElementById('authToggle');
+    var authOverlay = document.getElementById('authOverlay');
+    var authClose = document.getElementById('authClose');
+    var authUserPanel = document.getElementById('authUserPanel');
+    var authUserEmail = document.getElementById('authUserEmail');
+    var authLogout = document.getElementById('authLogout');
+    var tabLogin = document.getElementById('authTabLogin');
+    var tabSignup = document.getElementById('authTabSignup');
+    var formLogin = document.getElementById('authFormLogin');
+    var formSignup = document.getElementById('authFormSignup');
+    var errorLogin = document.getElementById('authErrorLogin');
+    var errorSignup = document.getElementById('authErrorSignup');
+    var authSwitch = document.getElementById('authSwitch');
+    if (!authToggle || !authOverlay) return;
+
+    var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    function getUser(){
+      try { return JSON.parse(localStorage.getItem(AUTH_KEY)); } catch(e){ return null; }
+    }
+    function renderAuthState(){
+      var user = getUser();
+      if (user){
+        authToggle.textContent = user.name || user.email.split('@')[0];
+        authToggle.classList.add('is-logged-in');
+        if (authUserEmail) authUserEmail.textContent = user.email;
+      } else {
+        authToggle.textContent = 'JOIN';
+        authToggle.classList.remove('is-logged-in');
+        closeUserPanel();
+      }
+    }
+    function setUser(user){
+      localStorage.setItem(AUTH_KEY, JSON.stringify(user));
+      renderAuthState();
+    }
+    function clearUser(){
+      localStorage.removeItem(AUTH_KEY);
+      renderAuthState();
+    }
+
+    function switchTab(tab){
+      var isLogin = tab === 'login';
+      tabLogin.classList.toggle('active', isLogin);
+      tabSignup.classList.toggle('active', !isLogin);
+      formLogin.hidden = !isLogin;
+      formSignup.hidden = isLogin;
+      errorLogin.textContent = '';
+      errorSignup.textContent = '';
+      authSwitch.innerHTML = isLogin
+        ? '아직 계정이 없으신가요? <button type="button" id="authSwitchBtn">회원가입</button>'
+        : '이미 계정이 있으신가요? <button type="button" id="authSwitchBtn">로그인</button>';
+      document.getElementById('authSwitchBtn').addEventListener('click', function(){
+        switchTab(isLogin ? 'signup' : 'login');
+      });
+    }
+
+    function openAuthModal(tab){
+      authOverlay.classList.add('open');
+      switchTab(tab || 'login');
+      var panel = authOverlay.querySelector('.auth-panel:not([hidden])');
+      var firstInput = panel ? panel.querySelector('input') : null;
+      if (firstInput) setTimeout(function(){ firstInput.focus(); }, 300);
+    }
+    function closeAuthModal(){
+      authOverlay.classList.remove('open');
+    }
+    function openUserPanel(){
+      authUserPanel.classList.add('open');
+      authToggle.setAttribute('aria-expanded', 'true');
+    }
+    function closeUserPanel(){
+      authUserPanel.classList.remove('open');
+      authToggle.setAttribute('aria-expanded', 'false');
+    }
+
+    authToggle.addEventListener('click', function(e){
+      e.stopPropagation();
+      if (getUser()){
+        authUserPanel.classList.contains('open') ? closeUserPanel() : openUserPanel();
+      } else {
+        openAuthModal('login');
+      }
+    });
+    if (authClose) authClose.addEventListener('click', closeAuthModal);
+    authOverlay.addEventListener('click', function(e){
+      if (e.target === authOverlay) closeAuthModal();
+    });
+    document.addEventListener('click', function(e){
+      if (authUserPanel && !authUserPanel.contains(e.target) && !authToggle.contains(e.target)){
+        closeUserPanel();
+      }
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape'){ closeAuthModal(); closeUserPanel(); }
+    });
+    if (tabLogin) tabLogin.addEventListener('click', function(){ switchTab('login'); });
+    if (tabSignup) tabSignup.addEventListener('click', function(){ switchTab('signup'); });
+
+    formLogin.addEventListener('submit', function(e){
+      e.preventDefault();
+      var data = new FormData(formLogin);
+      var email = String(data.get('email') || '').trim();
+      var password = String(data.get('password') || '');
+      if (!EMAIL_RE.test(email)) { errorLogin.textContent = '올바른 이메일 형식을 입력해주세요.'; return; }
+      if (password.length < 4) { errorLogin.textContent = '비밀번호는 4자 이상이어야 합니다.'; return; }
+      setUser({ email: email, name: email.split('@')[0] });
+      formLogin.reset();
+      closeAuthModal();
+    });
+
+    formSignup.addEventListener('submit', function(e){
+      e.preventDefault();
+      var data = new FormData(formSignup);
+      var name = String(data.get('name') || '').trim();
+      var email = String(data.get('email') || '').trim();
+      var password = String(data.get('password') || '');
+      if (!name) { errorSignup.textContent = '이름을 입력해주세요.'; return; }
+      if (!EMAIL_RE.test(email)) { errorSignup.textContent = '올바른 이메일 형식을 입력해주세요.'; return; }
+      if (password.length < 4) { errorSignup.textContent = '비밀번호는 4자 이상이어야 합니다.'; return; }
+      setUser({ email: email, name: name });
+      formSignup.reset();
+      closeAuthModal();
+    });
+
+    if (authLogout) authLogout.addEventListener('click', function(){
+      clearUser();
+      closeUserPanel();
+    });
+
+    renderAuthState();
+  })();
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
