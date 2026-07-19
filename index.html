@@ -27,6 +27,7 @@
     <symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 9h18M12 9v12M12 9C9 9 7 7.5 7 5.5A2.5 2.5 0 0 1 12 5a2.5 2.5 0 0 1 5 .5C17 7.5 15 9 12 9Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>
     <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18a4.5 4.5 0 0 1-.5-8.97A5.5 5.5 0 0 1 17.2 8.2 4 4 0 0 1 17 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 20v1M13 20v1M17 19v1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></symbol>
     <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 9.5h17M8 3v3.5M16 3v3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v5l3.5 2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-4 4v-4H4Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
     <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V6M6 11l6-6 6 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v13M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -259,11 +260,20 @@
   .auth-greeting{font-size:.85rem; font-weight:700; color:#fff; white-space:nowrap; max-width:100px; overflow:hidden; text-overflow:ellipsis}
   header.solid .auth-greeting{color:var(--ink)}
   .signup-btn.is-logged-in{text-transform:none; letter-spacing:.01em}
-  .auth-logout{font-size:.8rem; font-weight:700; color:var(--brick)}
+  .auth-logout{font-size:.85rem; font-weight:700; color:var(--brick)}
   .mypage-logout{display:block; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); width:100%; text-align:left}
 
   .mypage-modal{max-width:400px}
-  .mypage-profile{display:flex; align-items:center; gap:14px; padding:16px 0 20px}
+  .mypage-header{
+    margin:-32px -28px 0; padding:30px 28px 26px; border-radius:16px 16px 0 0;
+    background:linear-gradient(135deg, #788ab1, var(--indigo-soft));
+    text-align:center;
+  }
+  .mypage-header .eyebrow{color:var(--gold-soft)}
+  .mypage-header .auth-title{color:#fff; margin-top:6px}
+  .mypage-modal .auth-close{color:rgba(255,255,255,.8)}
+  .mypage-modal .auth-close:hover{color:#fff; background:rgba(255,255,255,.15)}
+  .mypage-profile{display:flex; align-items:center; gap:14px; padding:20px 0 20px}
   .mypage-avatar{
     width:52px; height:52px; border-radius:50%; flex:0 0 auto; overflow:hidden;
     background:var(--indigo); color:#fff; display:flex; align-items:center; justify-content:center;
@@ -272,10 +282,10 @@
   .mypage-avatar img{width:100%; height:100%; object-fit:cover}
   .mypage-avatar-icon{background:#fff; border:1px solid var(--line)}
   .mypage-avatar-icon .ico{width:26px; height:26px}
-  .mypage-profile-info{min-width:0}
-  .mypage-name{font-size:1.05rem; font-weight:800; color:var(--ink); margin:0 0 2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-  .mypage-email{font-size:.78rem; color:var(--ink-soft); margin:0 0 6px; word-break:break-all}
-  .mypage-provider{display:inline-flex; align-items:center; gap:5px; font-size:.72rem; font-weight:700; color:var(--ink-soft); background:var(--bg-alt); padding:4px 9px; border-radius:20px}
+  .mypage-profile-info{flex:1; min-width:0}
+  .mypage-name{font-size:1rem; font-weight:800; color:var(--ink); margin:0 0 4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .mypage-email{font-size:.92rem; font-weight:600; color:var(--ink-soft); margin:0 0 8px; word-break:break-all}
+  .mypage-provider{display:flex; width:100%; align-items:center; justify-content:center; gap:5px; font-size:.85rem; font-weight:700; color:var(--ink-soft); background:var(--bg-alt); padding:6px 10px; border-radius:20px}
   .mypage-provider .ico{width:12px; height:12px}
   .mypage-section{padding-top:18px; border-top:1px solid var(--line)}
   .mypage-section-title{font-size:.85rem; font-weight:800; color:var(--ink); margin:0 0 12px}
@@ -294,18 +304,30 @@
   .mypage-category li::before{content:''; position:absolute; left:0; top:.55em; width:5px; height:5px; border-radius:50%; background:var(--gold-soft)}
   .mypage-empty{font-size:.85rem; color:var(--ink-faint); text-align:center; padding:14px 0}
 
-  .reservation-modal{max-width:420px}
-  .auth-field-plain textarea{
+  .reservation-modal{max-width:1120px; overflow-x:hidden}
+  #reservationForm{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:14px 20px}
+  #reservationForm .auth-field{margin-bottom:0; min-width:0}
+  #reservationForm .auth-field input, #reservationForm .auth-field textarea{width:100%; min-width:0}
+  #reservationForm .auth-field-full, #reservationForm .auth-error, #reservationForm .auth-submit{grid-column:1 / -1}
+  @media (max-width:760px){ #reservationForm{grid-template-columns:1fr} }
+  .auth-field-plain textarea, .auth-field.auth-field-plain input{
     width:100%; padding:12px 14px; border:1.5px solid var(--line); border-radius:9px;
     background:var(--bg); color:var(--ink); font:inherit; font-size:.92rem; resize:vertical;
   }
-  .auth-field-plain textarea:focus{outline:none; border-color:var(--indigo)}
+  .auth-field-plain textarea:focus, .auth-field.auth-field-plain input:focus{outline:none; border-color:var(--indigo)}
   .reservation-list-wrap{margin-top:22px; padding-top:18px; border-top:1px solid var(--line)}
   .reservation-list-title{font-size:.85rem; font-weight:800; color:var(--ink); margin:0 0 10px}
   .reservation-list{display:flex; flex-direction:column; gap:8px; max-height:220px; overflow-y:auto}
   .reservation-item{border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:.82rem; color:var(--ink-soft)}
-  .reservation-item .r-date{display:block; font-weight:800; color:var(--indigo); font-size:.85rem; margin-bottom:4px}
+  .reservation-item .r-top{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:4px}
+  .reservation-item .r-org{font-weight:800; color:var(--ink); font-size:.88rem}
+  .reservation-item .r-date{display:block; font-weight:700; color:var(--indigo); font-size:.8rem; margin-bottom:4px}
   .reservation-item .r-note{margin-top:4px; color:var(--ink-faint)}
+  .r-status{flex:0 0 auto; font-size:.72rem; font-weight:700; padding:3px 9px; border-radius:20px}
+  .r-status-pending{background:var(--bg-alt); color:var(--ink-soft)}
+  .r-status-confirmed{background:color-mix(in srgb, var(--sage) 18%, transparent); color:var(--sage)}
+  .r-status-hold{background:color-mix(in srgb, var(--gold) 18%, transparent); color:var(--gold)}
+  .r-status-cancelled{background:color-mix(in srgb, var(--brick) 18%, transparent); color:var(--brick)}
 
   .auth-toast{
     position:fixed; top:20px; left:50%; z-index:300;
@@ -334,6 +356,7 @@
     width:100%; max-width:380px; background:var(--surface); border-radius:16px; box-shadow:var(--shadow);
     padding:32px 28px 28px; position:relative; color:var(--ink);
     transform:translateY(12px); transition:transform .3s ease;
+    max-height:calc(100vh - 40px); overflow-y:auto;
   }
   .auth-overlay.open .auth-modal{transform:none}
   .auth-close{
@@ -448,7 +471,6 @@
     box-shadow:var(--shadow);
     border:none;
   }
-  .quick-menu .ico{width:14px; height:14px; writing-mode:horizontal-tb}
   #upcoming .more-btn,
   #courses .more-btn,
   #explore .more-btn{
@@ -469,7 +491,16 @@
     font-size:.92rem; font-weight:600;
   }
   .quick-site-panel a:hover{background:var(--bg-alt)}
-  .reserve-quick-btn{top:calc(52% - 96px); background:var(--gold)}
+  .quick-menu{transition:background .2s ease, color .2s ease}
+  .quick-menu .ico{width:14px; height:14px; writing-mode:horizontal-tb; display:block}
+  .quick-menu.is-front{z-index:45; background:#fff; border:1px solid var(--line)}
+  .quick-menu.is-collapsed .ico{display:none}
+  #quickSiteBtn{background:var(--gold); color:#fff}
+  #quickSiteBtn .ico{display:none}
+  #quickSiteBtn.is-front .ico{display:block}
+  #quickSiteBtn.is-front{background:#fff; color:var(--gold)}
+  .reserve-quick-btn{top:calc(52% - 114px); background:var(--indigo); color:#fff}
+  .reserve-quick-btn.is-front{color:var(--indigo)}
   .scroll-top{
     position:fixed; right:22px; bottom:22px; z-index:40; width:46px; height:46px; border-radius:50%;
     background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow);
@@ -941,8 +972,8 @@
   </div>
 </div>
 
-<button class="quick-menu reserve-quick-btn" id="reserveQuickBtn" type="button">예약하기</button>
-<button class="quick-menu" id="quickSiteBtn" type="button" aria-expanded="false" aria-controls="quickSitePanel">Quick <svg class="ico" viewBox="0 0 24 24"><use href="#i-chev"/></svg></button>
+<button class="quick-menu reserve-quick-btn" id="reserveQuickBtn" type="button">Reservation <svg class="ico" viewBox="0 0 24 24"><use href="#i-chev"/></svg></button>
+<button class="quick-menu" id="quickSiteBtn" type="button" aria-expanded="false" aria-controls="quickSitePanel">Quick Link <svg class="ico" viewBox="0 0 24 24"><use href="#i-chev"/></svg></button>
 <div class="quick-site-panel" id="quickSitePanel">
   <a href="https://www.pyeongtaek.go.kr/tour/main.do" target="_blank" rel="noreferrer">평택문화관광 <svg class="ico" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
   <a href="https://www.cheonan.go.kr/tour/index.do" target="_blank" rel="noreferrer">천안시문화관광 <svg class="ico" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
@@ -999,7 +1030,10 @@
 <div class="auth-overlay" id="mypageOverlay">
   <div class="auth-modal mypage-modal" role="dialog" aria-modal="true" aria-labelledby="mypageTitle">
     <button type="button" class="auth-close" id="mypageClose" aria-label="닫기"><svg class="ico" viewBox="0 0 24 24"><use href="#i-close"/></svg></button>
-    <h2 class="auth-title" id="mypageTitle">마이페이지</h2>
+    <div class="mypage-header">
+      <span class="eyebrow">MY PAGE</span>
+      <h2 class="auth-title" id="mypageTitle">마이페이지</h2>
+    </div>
 
     <div class="mypage-profile">
       <div class="mypage-avatar" id="mypageAvatar"></div>
@@ -1029,9 +1063,12 @@
     <p class="auth-sub">방문 예약을 남기면 확인 후 연락드려요</p>
 
     <form id="reservationForm" novalidate>
+      <div class="auth-field auth-field-plain">
+        <input type="text" name="org_name" placeholder="단체명" required>
+      </div>
       <div class="auth-field">
         <svg class="ico" viewBox="0 0 24 24"><use href="#i-user"/></svg>
-        <input type="text" name="name" placeholder="이름" required autocomplete="name">
+        <input type="text" name="name" placeholder="담당자명" required autocomplete="name">
       </div>
       <div class="auth-field">
         <svg class="ico" viewBox="0 0 24 24"><use href="#i-phone"/></svg>
@@ -1039,9 +1076,16 @@
       </div>
       <div class="auth-field">
         <svg class="ico" viewBox="0 0 24 24"><use href="#i-calendar"/></svg>
-        <input type="date" name="res_date" required>
+        <input type="date" name="res_date" placeholder="방문 희망일" required>
+      </div>
+      <div class="auth-field">
+        <svg class="ico" viewBox="0 0 24 24"><use href="#i-clock"/></svg>
+        <input type="time" name="res_time" placeholder="방문 희망시간" required>
       </div>
       <div class="auth-field auth-field-plain">
+        <input type="number" name="visitor_count" placeholder="방문 인원" min="1" step="1" required>
+      </div>
+      <div class="auth-field auth-field-plain auth-field-full">
         <textarea name="note" placeholder="요청사항 (선택)" rows="3"></textarea>
       </div>
       <p class="auth-error" id="reservationError"></p>
@@ -1419,6 +1463,24 @@
     });
   }
 
+  var reserveQuickBtnEl = document.getElementById('reserveQuickBtn');
+  if (reserveQuickBtnEl && quickSiteBtn){
+    function activateQuickBtn(activeBtn, otherBtn){
+      activeBtn.classList.add('is-front');
+      activeBtn.classList.remove('is-collapsed');
+      otherBtn.classList.add('is-collapsed');
+      otherBtn.classList.remove('is-front');
+    }
+    function resetQuickBtns(){
+      reserveQuickBtnEl.classList.remove('is-front', 'is-collapsed');
+      quickSiteBtn.classList.remove('is-front', 'is-collapsed');
+    }
+    reserveQuickBtnEl.addEventListener('mouseenter', function(){ activateQuickBtn(reserveQuickBtnEl, quickSiteBtn); });
+    reserveQuickBtnEl.addEventListener('mouseleave', resetQuickBtns);
+    quickSiteBtn.addEventListener('mouseenter', function(){ activateQuickBtn(quickSiteBtn, reserveQuickBtnEl); });
+    quickSiteBtn.addEventListener('mouseleave', resetQuickBtns);
+  }
+
   // login / signup / logout (Supabase Auth, CDN 클라이언트 — 빌드 도구 없음)
   (function(){
     var SUPABASE_URL = 'https://fwxucmkwhxakkhpjzvyu.supabase.co';
@@ -1518,7 +1580,10 @@
     function renderMypage(){
       if (!currentUser) return;
       var meta = currentUser.user_metadata || {};
-      var provider = (currentUser.app_metadata && currentUser.app_metadata.provider) || 'email';
+      var linkedProviders = (currentUser.app_metadata && currentUser.app_metadata.providers) || [];
+      var provider = linkedProviders.indexOf('google') !== -1
+        ? 'google'
+        : ((currentUser.app_metadata && currentUser.app_metadata.provider) || 'email');
       var displayName = getDisplayName(currentUser);
       var avatarUrl = meta.avatar_url || meta.picture || '';
 
@@ -1568,12 +1633,15 @@
       if (mypageOverlay) mypageOverlay.classList.remove('open');
     }
 
+    var RESERVATION_STATUS_LABEL = { '접수중':'접수중', '확정':'확정', '보류':'보류', '취소':'취소' };
+    var RESERVATION_STATUS_CLASS = { '접수중':'r-status-pending', '확정':'r-status-confirmed', '보류':'r-status-hold', '취소':'r-status-cancelled' };
+
     function loadReservations(){
       if (!currentUser){
         myReservations = [];
         return;
       }
-      supabaseClient.from('reservations').select('name, phone, res_date, note')
+      supabaseClient.from('reservations').select('org_name, name, phone, res_date, res_time, visitor_count, note, status')
         .eq('user_id', currentUser.id).order('res_date', { ascending: true }).then(function(res){
           myReservations = res.data || [];
           if (reservationOverlay && reservationOverlay.classList.contains('open')) renderReservationList();
@@ -1587,9 +1655,16 @@
         return;
       }
       reservationList.innerHTML = myReservations.map(function(r){
+        var status = r.status || '접수중';
+        var statusClass = RESERVATION_STATUS_CLASS[status] || 'r-status-pending';
+        var statusLabel = RESERVATION_STATUS_LABEL[status] || status;
         var noteHtml = r.note ? '<div class="r-note">' + escapeHtml(r.note) + '</div>' : '';
-        return '<div class="reservation-item"><span class="r-date">' + escapeHtml(r.res_date) + '</span>' +
-          escapeHtml(r.name) + ' · ' + escapeHtml(r.phone) + noteHtml + '</div>';
+        return '<div class="reservation-item">' +
+          '<div class="r-top"><span class="r-org">' + escapeHtml(r.org_name || '') + '</span>' +
+          '<span class="r-status ' + statusClass + '">' + escapeHtml(statusLabel) + '</span></div>' +
+          '<span class="r-date">' + escapeHtml(r.res_date) + ' ' + escapeHtml(r.res_time || '') + ' · 인원 ' + escapeHtml(String(r.visitor_count || '')) + '명</span>' +
+          '<div>' + escapeHtml(r.name) + ' · ' + escapeHtml(r.phone) + '</div>' +
+          noteHtml + '</div>';
       }).join('');
     }
 
@@ -1692,18 +1767,25 @@
       e.preventDefault();
       if (!currentUser){ openAuthModal('login'); return; }
       var data = new FormData(reservationForm);
+      var orgName = String(data.get('org_name') || '').trim();
       var name = String(data.get('name') || '').trim();
       var phone = String(data.get('phone') || '').trim();
       var resDate = String(data.get('res_date') || '');
+      var resTime = String(data.get('res_time') || '');
+      var visitorCount = parseInt(data.get('visitor_count'), 10);
       var note = String(data.get('note') || '').trim();
-      if (!name) { setMessage(reservationError, '이름을 입력해주세요.'); return; }
+      if (!orgName) { setMessage(reservationError, '단체명을 입력해주세요.'); return; }
+      if (!name) { setMessage(reservationError, '담당자명을 입력해주세요.'); return; }
       if (!phone) { setMessage(reservationError, '연락처를 입력해주세요.'); return; }
-      if (!resDate) { setMessage(reservationError, '희망 날짜를 선택해주세요.'); return; }
+      if (!resDate) { setMessage(reservationError, '방문 희망일을 선택해주세요.'); return; }
+      if (!resTime) { setMessage(reservationError, '방문 희망시간을 선택해주세요.'); return; }
+      if (!visitorCount || visitorCount < 1) { setMessage(reservationError, '방문 인원을 입력해주세요.'); return; }
       var submitBtn = reservationForm.querySelector('.auth-submit');
       submitBtn.disabled = true;
       setMessage(reservationError, '');
       supabaseClient.from('reservations').insert({
-        user_id: currentUser.id, name: name, phone: phone, res_date: resDate, note: note
+        user_id: currentUser.id, org_name: orgName, name: name, phone: phone,
+        res_date: resDate, res_time: resTime, visitor_count: visitorCount, note: note
       }).then(function(res){
         submitBtn.disabled = false;
         if (res.error){ setMessage(reservationError, friendlyError(res.error)); return; }
