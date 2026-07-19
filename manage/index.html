@@ -74,7 +74,7 @@
 
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
-    <h1>예약 관리</h1>
+    <h1>관리SYSTEM</h1>
     <p>관리자 계정으로 로그인해주세요</p>
     <form id="loginForm">
       <div class="field"><input type="email" name="email" placeholder="이메일" required></div>
@@ -126,7 +126,9 @@
 (function(){
   var SUPABASE_URL = 'https://fwxucmkwhxakkhpjzvyu.supabase.co';
   var SUPABASE_ANON_KEY = 'sb_publishable_1xz6RFenbcEYarVGWOBsAw_0JsXq_xz';
-  var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: { storageKey: 'sis-manage-auth' }
+  });
 
   var loginScreen = document.getElementById('loginScreen');
   var deniedScreen = document.getElementById('deniedScreen');
