@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discover Local 게시판 — Visit Local</title>
+<title>예약하기 — Visit Local</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23000000'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='26' font-weight='700' font-family='Arial, sans-serif' fill='%23FFFFFF'%3EVL%3C/text%3E%3C/svg%3E">
 <style>
   :root{
@@ -33,10 +33,7 @@
   .head-right{display:flex; align-items:center; gap:12px; font-size:.84rem; color:var(--ink-soft); min-width:0}
   .head-right #whoBadge{overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:36vw}
   .head-right .btn-ghost{flex:none; background:none; border:1.5px solid var(--line); border-radius:20px; padding:7px 14px; color:var(--ink-soft); font-size:.8rem}
-  @media (max-width:480px){
-    .board-head{padding:14px 16px}
-    .card{padding:18px}
-  }
+  @media (max-width:480px){ .board-head{padding:14px 16px} .card{padding:18px} }
 
   .board-intro{padding:40px 0 24px; text-align:center}
   .eyebrow{font-size:.72rem; font-weight:700; letter-spacing:.14em; color:var(--gold)}
@@ -49,12 +46,12 @@
 
   .field{margin-bottom:12px}
   .field label{display:block; font-size:.78rem; font-weight:700; color:var(--ink-soft); margin-bottom:6px}
-  .field input, .field select, .field textarea{
+  .field input, .field textarea{
     width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius:9px;
     background:var(--bg); color:var(--ink); font:inherit; font-size:.9rem;
   }
-  .field input:focus, .field select:focus, .field textarea:focus{outline:none; border-color:var(--indigo)}
-  .field textarea{resize:vertical; min-height:90px}
+  .field input:focus, .field textarea:focus{outline:none; border-color:var(--indigo)}
+  .field textarea{resize:vertical; min-height:70px}
   .field-row{display:grid; grid-template-columns:1fr 1fr; gap:12px}
   @media (max-width:420px){ .field-row{grid-template-columns:1fr} }
 
@@ -66,18 +63,22 @@
     background:var(--surface); color:var(--ink); border:1.5px solid var(--line); font-weight:700; font-size:.88rem; padding:11px;
   }
   .msg{font-size:.8rem; color:var(--brick); min-height:1em; margin:8px 0 0}
+  .msg.ok{color:var(--sage)}
   .divider{display:flex; align-items:center; gap:10px; color:var(--ink-faint); font-size:.76rem; margin:16px 0}
   .divider::before, .divider::after{content:""; flex:1; height:1px; background:var(--line)}
 
-  .review-list{display:flex; flex-direction:column; gap:14px}
-  .review-item{background:var(--surface); border-radius:14px; box-shadow:var(--shadow); padding:18px 20px}
+  .sub-h{font-family:var(--font-display); font-size:1.1rem; margin:0 0 14px}
+  .res-list{display:flex; flex-direction:column; gap:12px}
+  .res-item{background:var(--surface); border-radius:14px; box-shadow:var(--shadow); padding:16px 20px}
   .r-top{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px}
-  .r-cat{font-size:.7rem; font-weight:700; color:#fff; background:#FF7A29; padding:4px 11px; border-radius:999px}
-  .r-stars{color:var(--gold); font-size:.82rem; letter-spacing:1px}
-  .r-title{font-size:1rem; margin:4px 0 6px}
-  .r-content{font-size:.88rem; color:var(--ink-soft); line-height:1.6; white-space:pre-wrap; margin:0 0 10px}
-  .r-photo{width:100%; max-height:280px; object-fit:cover; border-radius:10px; margin-bottom:10px; display:block}
-  .r-meta{font-size:.76rem; color:var(--ink-faint); display:flex; gap:8px}
+  .r-org{font-weight:800; font-size:.94rem}
+  .r-status{font-size:.72rem; font-weight:700; padding:4px 11px; border-radius:999px; background:var(--bg-alt); color:var(--ink-soft)}
+  .r-status-pending{background:var(--bg-alt); color:var(--ink-soft)}
+  .r-status-confirmed{background:color-mix(in srgb, var(--sage) 18%, transparent); color:var(--sage)}
+  .r-status-hold{background:color-mix(in srgb, var(--gold) 18%, transparent); color:var(--gold)}
+  .r-status-cancelled{background:color-mix(in srgb, var(--brick) 18%, transparent); color:var(--brick)}
+  .r-date{font-size:.84rem; color:var(--ink-soft); display:block; margin-bottom:4px}
+  .r-note{font-size:.82rem; color:var(--ink-faint); margin-top:6px}
   .empty{text-align:center; color:var(--ink-faint); font-size:.88rem; padding:40px 0}
 </style>
 </head>
@@ -93,14 +94,14 @@
 
 <div class="wrap">
   <div class="board-intro">
-    <span class="eyebrow">DISCOVER LOCAL</span>
-    <h1>내 지역 후기 게시판</h1>
-    <p>직접 다녀온 사람들의 진짜 후기를 남기고 확인해보세요.</p>
+    <span class="eyebrow">RESERVATION</span>
+    <h1>예약하기</h1>
+    <p>방문 예약을 남기면 확인 후 연락드려요.</p>
   </div>
 
   <div class="card write-card">
     <div id="loginPrompt">
-      <p>로그인하면 후기를 남길 수 있어요.</p>
+      <p>로그인하면 예약을 남길 수 있어요.</p>
       <div class="field">
         <label for="liEmail">이메일</label>
         <input type="email" id="liEmail" autocomplete="email">
@@ -124,47 +125,49 @@
       <p class="msg" style="color:var(--ink-faint)">아직 계정이 없으신가요? <a href="../index.html" style="text-decoration:underline">메인 페이지에서 회원가입</a>해주세요.</p>
     </div>
 
-    <form id="writeForm" hidden>
-      <p>후기를 남겨주세요, <b id="writeWho"></b>님</p>
+    <form id="reservationForm" hidden novalidate>
+      <p>예약 정보를 입력해주세요, <b id="writeWho"></b>님</p>
+      <div class="field">
+        <label for="resOrgName">단체명</label>
+        <input type="text" id="resOrgName" name="org_name" required>
+      </div>
       <div class="field-row">
         <div class="field">
-          <label for="rvCategory">카테고리</label>
-          <select id="rvCategory" required>
-            <option value="볼거리">볼거리</option>
-            <option value="먹거리">먹거리</option>
-            <option value="즐길거리">즐길거리</option>
-            <option value="숙소">숙소</option>
-          </select>
+          <label for="resName">담당자명</label>
+          <input type="text" id="resName" name="name" required autocomplete="name">
         </div>
         <div class="field">
-          <label for="rvRating">별점</label>
-          <select id="rvRating" required>
-            <option value="5">★★★★★ (5)</option>
-            <option value="4">★★★★☆ (4)</option>
-            <option value="3">★★★☆☆ (3)</option>
-            <option value="2">★★☆☆☆ (2)</option>
-            <option value="1">★☆☆☆☆ (1)</option>
-          </select>
+          <label for="resPhone">연락처</label>
+          <input type="tel" id="resPhone" name="phone" placeholder="010-0000-0000" required autocomplete="tel">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="resDate">방문 희망일</label>
+          <input type="date" id="resDate" name="res_date" required>
+        </div>
+        <div class="field">
+          <label for="resTime">방문 희망시간</label>
+          <input type="time" id="resTime" name="res_time" required>
         </div>
       </div>
       <div class="field">
-        <label for="rvTitle">제목</label>
-        <input type="text" id="rvTitle" maxlength="60" required>
+        <label for="resVisitorCount">방문 인원</label>
+        <input type="number" id="resVisitorCount" name="visitor_count" min="1" step="1" required>
       </div>
       <div class="field">
-        <label for="rvContent">내용</label>
-        <textarea id="rvContent" maxlength="1000" required></textarea>
+        <label for="resNote">요청사항 (선택)</label>
+        <textarea id="resNote" name="note" rows="2"></textarea>
       </div>
-      <div class="field">
-        <label for="rvPhotoUrl">사진 URL (선택)</label>
-        <input type="url" id="rvPhotoUrl" placeholder="https://...">
-      </div>
-      <p class="msg" id="writeMsg"></p>
-      <button type="submit" class="btn btn-primary" id="writeSubmitBtn" style="width:100%">후기 등록하기</button>
+      <p class="msg" id="reservationError"></p>
+      <button type="submit" class="btn btn-primary" id="reservationSubmitBtn" style="width:100%">예약하기</button>
     </form>
   </div>
 
-  <div class="review-list" id="reviewList"><p class="empty">후기를 불러오는 중입니다...</p></div>
+  <div id="myReservationsSection" hidden>
+    <h2 class="sub-h">내 예약 내역</h2>
+    <div class="res-list" id="myReservationList"></div>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -182,18 +185,17 @@
   var loginBtn = document.getElementById('loginBtn');
   var loginMsg = document.getElementById('loginMsg');
   var googleBtn = document.getElementById('googleBtn');
-  var writeForm = document.getElementById('writeForm');
+  var reservationForm = document.getElementById('reservationForm');
   var writeWho = document.getElementById('writeWho');
-  var writeMsg = document.getElementById('writeMsg');
-  var writeSubmitBtn = document.getElementById('writeSubmitBtn');
-  var rvCategory = document.getElementById('rvCategory');
-  var rvRating = document.getElementById('rvRating');
-  var rvTitle = document.getElementById('rvTitle');
-  var rvContent = document.getElementById('rvContent');
-  var rvPhotoUrl = document.getElementById('rvPhotoUrl');
-  var reviewList = document.getElementById('reviewList');
+  var reservationError = document.getElementById('reservationError');
+  var reservationSubmitBtn = document.getElementById('reservationSubmitBtn');
+  var myReservationsSection = document.getElementById('myReservationsSection');
+  var myReservationList = document.getElementById('myReservationList');
 
   var currentUser = null;
+
+  var STATUS_LABEL = { '접수중':'접수중', '확정':'확정', '보류':'보류', '취소':'취소' };
+  var STATUS_CLASS = { '접수중':'r-status-pending', '확정':'r-status-confirmed', '보류':'r-status-hold', '취소':'r-status-cancelled' };
 
   function escapeHtml(str){
     var div = document.createElement('div');
@@ -206,50 +208,54 @@
     return meta.full_name || meta.name || user.email.split('@')[0];
   }
 
-  function starsHtml(rating){
-    var n = Math.max(0, Math.min(5, parseInt(rating, 10) || 0));
-    return '★★★★★'.slice(0, n) + '☆☆☆☆☆'.slice(0, 5 - n);
-  }
-
   function renderAuthState(user){
     if (user){
       whoBadge.textContent = getDisplayName(user) + '님';
       logoutBtn.hidden = false;
       loginPrompt.hidden = true;
-      writeForm.hidden = false;
+      reservationForm.hidden = false;
       writeWho.textContent = getDisplayName(user);
+      myReservationsSection.hidden = false;
+      var dateInput = reservationForm.querySelector('input[name="res_date"]');
+      if (dateInput) dateInput.min = new Date().toISOString().slice(0, 10);
+      loadMyReservations();
     } else {
       whoBadge.textContent = '';
       logoutBtn.hidden = true;
       loginPrompt.hidden = false;
-      writeForm.hidden = true;
+      reservationForm.hidden = true;
+      myReservationsSection.hidden = true;
+      myReservationList.innerHTML = '';
     }
   }
 
-  function loadReviews(){
-    supabaseClient.from('reviews')
-      .select('author_name, category, rating, title, content, photo_url, created_at')
-      .order('created_at', { ascending: false })
+  function loadMyReservations(){
+    if (!currentUser) return;
+    supabaseClient.from('reservations')
+      .select('org_name, name, phone, res_date, res_time, visitor_count, note, status')
+      .eq('user_id', currentUser.id)
+      .order('res_date', { ascending: true })
       .then(function(res){
         if (res.error){
-          reviewList.innerHTML = '<p class="empty">후기를 불러오지 못했습니다: ' + escapeHtml(res.error.message) + '</p>';
+          myReservationList.innerHTML = '<p class="empty">예약 내역을 불러오지 못했습니다: ' + escapeHtml(res.error.message) + '</p>';
           return;
         }
         var rows = res.data || [];
         if (!rows.length){
-          reviewList.innerHTML = '<p class="empty">아직 등록된 후기가 없어요. 첫 후기를 남겨보세요!</p>';
+          myReservationList.innerHTML = '<p class="empty">아직 예약 내역이 없어요.</p>';
           return;
         }
-        reviewList.innerHTML = rows.map(function(r){
-          var created = r.created_at ? new Date(r.created_at).toLocaleDateString('ko-KR') : '';
-          var photoHtml = r.photo_url ? '<img class="r-photo" src="' + escapeHtml(r.photo_url) + '" alt="" loading="lazy">' : '';
-          return '<article class="review-item">' +
-            photoHtml +
-            '<div class="r-top"><span class="r-cat">' + escapeHtml(r.category) + '</span><span class="r-stars">' + starsHtml(r.rating) + '</span></div>' +
-            '<h3 class="r-title">' + escapeHtml(r.title) + '</h3>' +
-            '<p class="r-content">' + escapeHtml(r.content) + '</p>' +
-            '<div class="r-meta"><span>' + escapeHtml(r.author_name) + '</span><span>' + escapeHtml(created) + '</span></div>' +
-            '</article>';
+        myReservationList.innerHTML = rows.map(function(r){
+          var status = r.status || '접수중';
+          var statusClass = STATUS_CLASS[status] || 'r-status-pending';
+          var statusLabel = STATUS_LABEL[status] || status;
+          var noteHtml = r.note ? '<div class="r-note">' + escapeHtml(r.note) + '</div>' : '';
+          return '<div class="res-item">' +
+            '<div class="r-top"><span class="r-org">' + escapeHtml(r.org_name || '') + '</span>' +
+            '<span class="r-status ' + statusClass + '">' + escapeHtml(statusLabel) + '</span></div>' +
+            '<span class="r-date">' + escapeHtml(r.res_date) + ' ' + escapeHtml(r.res_time || '') + ' · 인원 ' + escapeHtml(String(r.visitor_count || '')) + '명</span>' +
+            '<div>' + escapeHtml(r.name) + ' · ' + escapeHtml(r.phone) + '</div>' +
+            noteHtml + '</div>';
         }).join('');
       });
   }
@@ -277,28 +283,35 @@
     supabaseClient.auth.signOut();
   });
 
-  writeForm.addEventListener('submit', function(e){
+  reservationForm.addEventListener('submit', function(e){
     e.preventDefault();
     if (!currentUser) return;
-    var title = rvTitle.value.trim();
-    var content = rvContent.value.trim();
-    writeMsg.textContent = '';
-    if (!title){ writeMsg.textContent = '제목을 입력해주세요.'; return; }
-    if (!content){ writeMsg.textContent = '내용을 입력해주세요.'; return; }
-    writeSubmitBtn.disabled = true;
-    supabaseClient.from('reviews').insert({
-      user_id: currentUser.id,
-      author_name: getDisplayName(currentUser),
-      category: rvCategory.value,
-      rating: parseInt(rvRating.value, 10),
-      title: title,
-      content: content,
-      photo_url: rvPhotoUrl.value.trim() || null
+    var data = new FormData(reservationForm);
+    var orgName = String(data.get('org_name') || '').trim();
+    var name = String(data.get('name') || '').trim();
+    var phone = String(data.get('phone') || '').trim();
+    var resDate = String(data.get('res_date') || '');
+    var resTime = String(data.get('res_time') || '');
+    var visitorCount = parseInt(data.get('visitor_count'), 10);
+    var note = String(data.get('note') || '').trim();
+    reservationError.textContent = '';
+    if (!orgName) { reservationError.textContent = '단체명을 입력해주세요.'; return; }
+    if (!name) { reservationError.textContent = '담당자명을 입력해주세요.'; return; }
+    if (!phone) { reservationError.textContent = '연락처를 입력해주세요.'; return; }
+    if (!resDate) { reservationError.textContent = '방문 희망일을 선택해주세요.'; return; }
+    if (!resTime) { reservationError.textContent = '방문 희망시간을 선택해주세요.'; return; }
+    if (!visitorCount || visitorCount < 1) { reservationError.textContent = '방문 인원을 입력해주세요.'; return; }
+    reservationSubmitBtn.disabled = true;
+    supabaseClient.from('reservations').insert({
+      user_id: currentUser.id, org_name: orgName, name: name, phone: phone,
+      res_date: resDate, res_time: resTime, visitor_count: visitorCount, note: note
     }).then(function(res){
-      writeSubmitBtn.disabled = false;
-      if (res.error){ writeMsg.textContent = '등록에 실패했습니다: ' + res.error.message; return; }
-      writeForm.reset();
-      loadReviews();
+      reservationSubmitBtn.disabled = false;
+      if (res.error){ reservationError.textContent = res.error.message; return; }
+      reservationForm.reset();
+      reservationError.classList.add('ok');
+      reservationError.textContent = '예약이 접수되었습니다.';
+      loadMyReservations();
     });
   });
 
@@ -310,8 +323,6 @@
     currentUser = session ? session.user : null;
     renderAuthState(currentUser);
   });
-
-  loadReviews();
 })();
 </script>
 </body>

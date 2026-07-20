@@ -306,8 +306,15 @@
   .mypage-email{font-size:.92rem; font-weight:600; color:var(--ink-soft); margin:0 0 8px; word-break:break-all}
   .mypage-provider{display:flex; width:100%; align-items:center; justify-content:center; gap:5px; font-size:.85rem; font-weight:700; color:var(--ink-soft); background:var(--bg-alt); padding:6px 10px; border-radius:20px}
   .mypage-provider .ico{width:12px; height:12px}
-  .mypage-section{padding-top:18px; border-top:1px solid var(--line)}
-  .mypage-section-title{font-size:.85rem; font-weight:800; color:var(--ink); margin:0 0 12px}
+  .mypage-password{padding-top:16px; border-top:1px solid var(--line)}
+  .mypage-password-toggle{font-size:.82rem; font-weight:700; color:var(--indigo)}
+  .mypage-password-toggle:hover{text-decoration:underline}
+  .mypage-password-form{margin-top:12px; display:flex; flex-direction:column; gap:4px}
+  .mypage-tabs{display:flex; margin-top:18px; border-bottom:1px solid var(--line)}
+  .mypage-tab{flex:1; padding:10px 4px; font-size:.85rem; font-weight:700; color:var(--ink-faint); border-bottom:2px solid transparent; margin-bottom:-1px; text-align:center}
+  .mypage-tab.active{color:var(--indigo); border-bottom-color:var(--indigo)}
+  .mypage-tab-panel{padding-top:18px}
+  .mypage-tab-panel[hidden]{display:none}
   .mypage-summary{
     display:flex; align-items:baseline; gap:8px; padding-bottom:16px;
     border-bottom:1px solid var(--line); margin-bottom:18px;
@@ -323,10 +330,6 @@
   .mypage-category li::before{content:''; position:absolute; left:0; top:.55em; width:5px; height:5px; border-radius:50%; background:var(--gold-soft)}
   .mypage-empty{font-size:.85rem; color:var(--ink-faint); text-align:center; padding:14px 0}
 
-  .auth-modal.reservation-modal{width:100%; max-width:min(500px, 92vw); max-height:90vh; overflow-x:hidden; overflow-y:auto}
-  #reservationForm{display:flex; flex-direction:column}
-  .reservation-modal .auth-field{margin-bottom:10px}
-  .reservation-modal .auth-field input{padding-top:9px; padding-bottom:9px}
   .auth-field-plain textarea, .auth-field.auth-field-plain input{
     width:100%; padding:9px 14px; border:1.5px solid var(--line); border-radius:9px;
     background:var(--bg); color:var(--ink); font:inherit; font-size:.92rem; resize:vertical;
@@ -778,6 +781,7 @@
     filter:blur(3px);
   }
   .photo-art > div, .pf-art > div{position:absolute; inset:0}
+  .photo-art > img.photo-real-img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
 
   /* ---------- editor courses: shorts-style 2-1-2 carousel ---------- */
   .feat-carousel{position:relative; padding:0 clamp(30px,6vw,64px)}
@@ -1011,19 +1015,19 @@
       <h3><a href="#info" class="menu-link">여행정보</a></h3>
     </div>
     <div class="menu-col">
-      <h3><a href="#" class="menu-link" id="menuReserveLink">예약하기</a></h3>
+      <h3><a href="reservation/index.html" class="menu-link" id="menuReserveLink">예약하기</a></h3>
     </div>
     <div class="menu-col">
       <h3>커뮤니티</h3>
       <ul>
-        <li><a href="#" class="menu-link">공지사항</a></li>
-        <li><a href="#" class="menu-link">질문하기</a></li>
+        <li><a href="board/notice.html" class="menu-link">공지사항</a></li>
+        <li><a href="board/qna.html" class="menu-link">질문하기</a></li>
       </ul>
     </div>
   </div>
 </div>
 
-<button class="quick-menu reserve-quick-btn" id="reserveQuickBtn" type="button">Reservation <svg class="ico" viewBox="0 0 24 24"><use href="#i-chev"/></svg></button>
+<a class="quick-menu reserve-quick-btn" id="reserveQuickBtn" href="reservation/index.html">Reservation <svg class="ico" viewBox="0 0 24 24"><use href="#i-chev"/></svg></a>
 <button class="quick-menu" id="quickSiteBtn" type="button" aria-expanded="false" aria-controls="quickSitePanel">Quick Link <svg class="ico" viewBox="0 0 24 24"><use href="#i-chev"/></svg></button>
 <div class="quick-site-panel" id="quickSitePanel">
   <a href="https://www.pyeongtaek.go.kr/tour/main.do" target="_blank" rel="noreferrer">평택문화관광 <svg class="ico" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
@@ -1123,8 +1127,23 @@
       </div>
     </div>
 
-    <div class="mypage-section">
-      <h3 class="mypage-section-title">찜한 게시물</h3>
+    <div class="mypage-password" id="mypagePasswordSection" hidden>
+      <button type="button" class="mypage-password-toggle" id="mypagePasswordToggle">비밀번호 변경</button>
+      <form class="mypage-password-form" id="mypagePasswordForm" hidden novalidate>
+        <div class="auth-field auth-field-plain">
+          <input type="password" name="password" placeholder="새 비밀번호 (6자 이상)" required minlength="6" autocomplete="new-password">
+        </div>
+        <p class="auth-error" id="mypagePasswordError"></p>
+        <button type="submit" class="auth-submit">변경하기</button>
+      </form>
+    </div>
+
+    <div class="mypage-tabs">
+      <button type="button" class="mypage-tab active" data-mypage-tab="favorites">찜한 게시물</button>
+      <button type="button" class="mypage-tab" data-mypage-tab="reservations">예약 현황</button>
+    </div>
+
+    <div class="mypage-tab-panel" data-mypage-panel="favorites">
       <div class="mypage-summary">
         <span class="mypage-count" id="mypageTotalCount">0</span>
         <span class="mypage-count-label">개의 게시물을 찜했어요</span>
@@ -1132,49 +1151,11 @@
       <div class="mypage-categories" id="mypageCategories"></div>
     </div>
 
-    <div class="mypage-section">
-      <h3 class="mypage-section-title">예약 현황</h3>
+    <div class="mypage-tab-panel" data-mypage-panel="reservations" hidden>
       <div class="reservation-list" id="mypageReservationList"></div>
     </div>
+
     <button type="button" class="auth-logout mypage-logout" id="authLogout">로그아웃</button>
-  </div>
-</div>
-
-<div class="auth-overlay" id="reservationOverlay">
-  <div class="auth-modal reservation-modal" role="dialog" aria-modal="true" aria-labelledby="reservationTitle">
-    <button type="button" class="auth-close" id="reservationClose" aria-label="닫기"><svg class="ico" viewBox="0 0 24 24"><use href="#i-close"/></svg></button>
-    <h2 class="auth-title" id="reservationTitle">예약하기</h2>
-    <p class="auth-sub">방문 예약을 남기면 확인 후 연락드려요</p>
-
-    <form id="reservationForm" novalidate>
-      <div class="auth-field auth-field-plain">
-        <input type="text" name="org_name" placeholder="단체명" required>
-      </div>
-      <div class="auth-field">
-        <svg class="ico" viewBox="0 0 24 24"><use href="#i-user"/></svg>
-        <input type="text" name="name" placeholder="담당자명" required autocomplete="name">
-      </div>
-      <div class="auth-field">
-        <svg class="ico" viewBox="0 0 24 24"><use href="#i-phone"/></svg>
-        <input type="tel" name="phone" placeholder="연락처 (010-0000-0000)" required autocomplete="tel">
-      </div>
-      <div class="auth-field">
-        <svg class="ico" viewBox="0 0 24 24"><use href="#i-calendar"/></svg>
-        <input type="date" name="res_date" placeholder="방문 희망일" required>
-      </div>
-      <div class="auth-field">
-        <svg class="ico" viewBox="0 0 24 24"><use href="#i-clock"/></svg>
-        <input type="time" name="res_time" placeholder="방문 희망시간" required>
-      </div>
-      <div class="auth-field auth-field-plain">
-        <input type="number" name="visitor_count" placeholder="방문 인원" min="1" step="1" required>
-      </div>
-      <div class="auth-field auth-field-plain auth-field-full">
-        <textarea name="note" placeholder="요청사항 (선택)" rows="2"></textarea>
-      </div>
-      <p class="auth-error" id="reservationError"></p>
-      <button type="submit" class="auth-submit">예약하기</button>
-    </form>
   </div>
 </div>
 
@@ -1598,17 +1579,17 @@
     var mypageTotalCount = document.getElementById('mypageTotalCount');
     var mypageCategories = document.getElementById('mypageCategories');
     var mypageReservationList = document.getElementById('mypageReservationList');
+    var mypagePasswordSection = document.getElementById('mypagePasswordSection');
+    var mypagePasswordToggle = document.getElementById('mypagePasswordToggle');
+    var mypagePasswordForm = document.getElementById('mypagePasswordForm');
+    var mypagePasswordError = document.getElementById('mypagePasswordError');
+    var mypageTabs = document.querySelectorAll('.mypage-tab');
+    var mypagePanels = document.querySelectorAll('.mypage-tab-panel');
     var heartBtns = document.querySelectorAll('.heart-btn');
     var explorePhotoGrid = document.getElementById('explorePhotoGrid');
     var authToast = document.getElementById('authToast');
     var authToastMsg = document.getElementById('authToastMsg');
     var authToastClose = document.getElementById('authToastClose');
-    var reserveQuickBtn = document.getElementById('reserveQuickBtn');
-    var menuReserveLink = document.getElementById('menuReserveLink');
-    var reservationOverlay = document.getElementById('reservationOverlay');
-    var reservationClose = document.getElementById('reservationClose');
-    var reservationForm = document.getElementById('reservationForm');
-    var reservationError = document.getElementById('reservationError');
     if (!authToggle || !authOverlay || !window.supabase) return;
 
     var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -1684,7 +1665,7 @@
     function loadExploreReviews(){
       if (!explorePhotoGrid) return;
       supabaseClient.from('reviews')
-        .select('id, author_name, category, rating, title, content, created_at')
+        .select('id, author_name, category, rating, title, content, photo_url, created_at')
         .order('rating', { ascending: false })
         .order('created_at', { ascending: false })
         .limit(4)
@@ -1698,9 +1679,12 @@
             var icon = EXPLORE_ICON[r.category] || 'i-mountain';
             var created = r.created_at ? new Date(r.created_at).toLocaleDateString('ko-KR') : '';
             var text = r.content.length > 70 ? r.content.slice(0, 70) + '…' : r.content;
+            var artHtml = r.photo_url
+              ? '<img class="photo-real-img" src="' + escapeHtml(r.photo_url) + '" alt="" loading="lazy">'
+              : '<div class="' + scene + '"></div>';
             return '<article class="photo-card">' +
               '<div class="photo-art">' +
-                '<div class="' + scene + '"></div>' +
+                artHtml +
                 '<span class="cat-badge">' + escapeHtml(r.category) + '</span>' +
                 '<button class="heart-btn" aria-label="찜하기" data-item-id="review-' + r.id + '" data-title="' + escapeHtml(r.title) + '" data-category="' + escapeHtml(r.category) + '">' +
                   '<svg class="ico heart-outline" viewBox="0 0 24 24"><use href="#i-heart"/></svg>' +
@@ -1747,6 +1731,7 @@
       } else {
         mypageProvider.innerHTML = '<svg class="ico" viewBox="0 0 24 24"><use href="#i-mail"/></svg><span>이메일 계정</span>';
       }
+      if (mypagePasswordSection) mypagePasswordSection.hidden = provider !== 'email';
 
       mypageTotalCount.textContent = myFavorites.length;
       var byCategory = {};
@@ -1766,14 +1751,45 @@
       }).join('');
     }
 
+    function switchMypageTab(tab){
+      mypageTabs.forEach(function(btn){ btn.classList.toggle('active', btn.dataset.mypageTab === tab); });
+      mypagePanels.forEach(function(panel){ panel.hidden = panel.dataset.mypagePanel !== tab; });
+    }
+    mypageTabs.forEach(function(btn){
+      btn.addEventListener('click', function(){ switchMypageTab(btn.dataset.mypageTab); });
+    });
+
     function openMypage(){
       if (!currentUser) return;
       renderMypage();
+      switchMypageTab('favorites');
+      if (mypagePasswordForm){ mypagePasswordForm.hidden = true; mypagePasswordForm.reset(); }
+      setMessage(mypagePasswordError, '');
       mypageOverlay.classList.add('open');
     }
     function closeMypage(){
       if (mypageOverlay) mypageOverlay.classList.remove('open');
     }
+
+    if (mypagePasswordToggle) mypagePasswordToggle.addEventListener('click', function(){
+      mypagePasswordForm.hidden = !mypagePasswordForm.hidden;
+    });
+    if (mypagePasswordForm) mypagePasswordForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      var data = new FormData(mypagePasswordForm);
+      var password = String(data.get('password') || '');
+      if (password.length < 6){ setMessage(mypagePasswordError, '비밀번호는 6자 이상이어야 합니다.'); return; }
+      var submitBtn = mypagePasswordForm.querySelector('.auth-submit');
+      submitBtn.disabled = true;
+      setMessage(mypagePasswordError, '');
+      supabaseClient.auth.updateUser({ password: password }).then(function(res){
+        submitBtn.disabled = false;
+        if (res.error){ setMessage(mypagePasswordError, friendlyError(res.error)); return; }
+        mypagePasswordForm.reset();
+        mypagePasswordForm.hidden = true;
+        showToast('비밀번호가 변경되었습니다.');
+      });
+    });
 
     var RESERVATION_STATUS_LABEL = { '접수중':'접수중', '확정':'확정', '보류':'보류', '취소':'취소' };
     var RESERVATION_STATUS_CLASS = { '접수중':'r-status-pending', '확정':'r-status-confirmed', '보류':'r-status-hold', '취소':'r-status-cancelled' };
@@ -1806,21 +1822,6 @@
               noteHtml + '</div>';
           }).join('');
       if (mypageReservationList) mypageReservationList.innerHTML = html;
-    }
-
-    function openReservationModal(){
-      if (!currentUser){
-        showToast('로그인 후 예약이 가능합니다.');
-        openAuthModal('login');
-        return;
-      }
-      setMessage(reservationError, '');
-      var dateInput = reservationForm.querySelector('input[name="res_date"]');
-      if (dateInput) dateInput.min = new Date().toISOString().slice(0, 10);
-      reservationOverlay.classList.add('open');
-    }
-    function closeReservationModal(){
-      if (reservationOverlay) reservationOverlay.classList.remove('open');
     }
 
     var toastTimer = null;
@@ -1884,7 +1885,7 @@
       if (e.target === authOverlay) closeAuthModal();
     });
     document.addEventListener('keydown', function(e){
-      if (e.key === 'Escape'){ closeAuthModal(); closeMypage(); closeReservationModal(); hideToast(); }
+      if (e.key === 'Escape'){ closeAuthModal(); closeMypage(); hideToast(); }
     });
     if (authForgotBtn) authForgotBtn.addEventListener('click', function(){ switchTab('reset'); });
     if (authBackToLoginBtn) authBackToLoginBtn.addEventListener('click', function(){ switchTab('login'); });
@@ -1934,47 +1935,6 @@
       if (e.target === mypageOverlay) closeMypage();
     });
     if (authToastClose) authToastClose.addEventListener('click', hideToast);
-
-    if (reserveQuickBtn) reserveQuickBtn.addEventListener('click', openReservationModal);
-    if (menuReserveLink) menuReserveLink.addEventListener('click', function(e){
-      e.preventDefault();
-      openReservationModal();
-    });
-    if (reservationClose) reservationClose.addEventListener('click', closeReservationModal);
-    if (reservationOverlay) reservationOverlay.addEventListener('click', function(e){
-      if (e.target === reservationOverlay) closeReservationModal();
-    });
-    if (reservationForm) reservationForm.addEventListener('submit', function(e){
-      e.preventDefault();
-      if (!currentUser){ openAuthModal('login'); return; }
-      var data = new FormData(reservationForm);
-      var orgName = String(data.get('org_name') || '').trim();
-      var name = String(data.get('name') || '').trim();
-      var phone = String(data.get('phone') || '').trim();
-      var resDate = String(data.get('res_date') || '');
-      var resTime = String(data.get('res_time') || '');
-      var visitorCount = parseInt(data.get('visitor_count'), 10);
-      var note = String(data.get('note') || '').trim();
-      if (!orgName) { setMessage(reservationError, '단체명을 입력해주세요.'); return; }
-      if (!name) { setMessage(reservationError, '담당자명을 입력해주세요.'); return; }
-      if (!phone) { setMessage(reservationError, '연락처를 입력해주세요.'); return; }
-      if (!resDate) { setMessage(reservationError, '방문 희망일을 선택해주세요.'); return; }
-      if (!resTime) { setMessage(reservationError, '방문 희망시간을 선택해주세요.'); return; }
-      if (!visitorCount || visitorCount < 1) { setMessage(reservationError, '방문 인원을 입력해주세요.'); return; }
-      var submitBtn = reservationForm.querySelector('.auth-submit');
-      submitBtn.disabled = true;
-      setMessage(reservationError, '');
-      supabaseClient.from('reservations').insert({
-        user_id: currentUser.id, org_name: orgName, name: name, phone: phone,
-        res_date: resDate, res_time: resTime, visitor_count: visitorCount, note: note
-      }).then(function(res){
-        submitBtn.disabled = false;
-        if (res.error){ setMessage(reservationError, friendlyError(res.error)); return; }
-        reservationForm.reset();
-        loadReservations();
-        showToast('예약이 접수되었습니다.');
-      });
-    });
 
     function bindHeartBtns(list){
       list.forEach(function(btn){

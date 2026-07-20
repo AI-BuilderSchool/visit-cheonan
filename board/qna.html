@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discover Local 게시판 — Visit Local</title>
+<title>질문하기 — Visit Local</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23000000'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='26' font-weight='700' font-family='Arial, sans-serif' fill='%23FFFFFF'%3EVL%3C/text%3E%3C/svg%3E">
 <style>
   :root{
@@ -33,10 +33,7 @@
   .head-right{display:flex; align-items:center; gap:12px; font-size:.84rem; color:var(--ink-soft); min-width:0}
   .head-right #whoBadge{overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:36vw}
   .head-right .btn-ghost{flex:none; background:none; border:1.5px solid var(--line); border-radius:20px; padding:7px 14px; color:var(--ink-soft); font-size:.8rem}
-  @media (max-width:480px){
-    .board-head{padding:14px 16px}
-    .card{padding:18px}
-  }
+  @media (max-width:480px){ .board-head{padding:14px 16px} .card{padding:18px} }
 
   .board-intro{padding:40px 0 24px; text-align:center}
   .eyebrow{font-size:.72rem; font-weight:700; letter-spacing:.14em; color:var(--gold)}
@@ -49,14 +46,12 @@
 
   .field{margin-bottom:12px}
   .field label{display:block; font-size:.78rem; font-weight:700; color:var(--ink-soft); margin-bottom:6px}
-  .field input, .field select, .field textarea{
+  .field input, .field textarea{
     width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius:9px;
     background:var(--bg); color:var(--ink); font:inherit; font-size:.9rem;
   }
-  .field input:focus, .field select:focus, .field textarea:focus{outline:none; border-color:var(--indigo)}
+  .field input:focus, .field textarea:focus{outline:none; border-color:var(--indigo)}
   .field textarea{resize:vertical; min-height:90px}
-  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:12px}
-  @media (max-width:420px){ .field-row{grid-template-columns:1fr} }
 
   .btn{padding:11px 18px; border-radius:9px; border:none; font-weight:800; font-size:.88rem}
   .btn-primary{background:var(--indigo); color:#fff}
@@ -69,15 +64,25 @@
   .divider{display:flex; align-items:center; gap:10px; color:var(--ink-faint); font-size:.76rem; margin:16px 0}
   .divider::before, .divider::after{content:""; flex:1; height:1px; background:var(--line)}
 
-  .review-list{display:flex; flex-direction:column; gap:14px}
-  .review-item{background:var(--surface); border-radius:14px; box-shadow:var(--shadow); padding:18px 20px}
-  .r-top{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px}
-  .r-cat{font-size:.7rem; font-weight:700; color:#fff; background:#FF7A29; padding:4px 11px; border-radius:999px}
-  .r-stars{color:var(--gold); font-size:.82rem; letter-spacing:1px}
-  .r-title{font-size:1rem; margin:4px 0 6px}
-  .r-content{font-size:.88rem; color:var(--ink-soft); line-height:1.6; white-space:pre-wrap; margin:0 0 10px}
-  .r-photo{width:100%; max-height:280px; object-fit:cover; border-radius:10px; margin-bottom:10px; display:block}
-  .r-meta{font-size:.76rem; color:var(--ink-faint); display:flex; gap:8px}
+  .q-list{display:flex; flex-direction:column; gap:10px}
+  .q-item{background:var(--surface); border-radius:14px; box-shadow:var(--shadow); overflow:hidden}
+  .q-row{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:16px 20px; width:100%; background:none; border:none; text-align:left; color:inherit;
+  }
+  .q-row .q-title{font-size:.94rem; font-weight:700}
+  .q-row .q-meta{font-size:.78rem; color:var(--ink-faint); display:flex; align-items:center; gap:8px; flex:none}
+  .q-badge{font-size:.68rem; font-weight:700; padding:3px 9px; border-radius:999px; background:var(--bg-alt); color:var(--ink-faint)}
+  .q-badge.answered{background:color-mix(in srgb, var(--sage) 18%, transparent); color:var(--sage)}
+  .q-chev{margin-left:4px; flex:none; transition:transform .2s ease; color:var(--ink-faint)}
+  .q-item.open .q-chev{transform:rotate(180deg)}
+  .q-body{max-height:0; overflow:hidden; transition:max-height .3s ease}
+  .q-item.open .q-body{max-height:800px}
+  .q-body-inner{padding:0 20px 20px; border-top:1px solid var(--line); margin:0 20px; padding-top:14px}
+  .q-content{font-size:.88rem; color:var(--ink-soft); white-space:pre-wrap; margin:0}
+  .q-answer{margin-top:14px; padding:14px 16px; background:var(--bg-alt); border-radius:10px}
+  .q-answer-label{font-size:.72rem; font-weight:700; color:var(--indigo); margin-bottom:6px}
+  .q-answer-text{font-size:.87rem; color:var(--ink); white-space:pre-wrap; margin:0}
   .empty{text-align:center; color:var(--ink-faint); font-size:.88rem; padding:40px 0}
 </style>
 </head>
@@ -93,14 +98,14 @@
 
 <div class="wrap">
   <div class="board-intro">
-    <span class="eyebrow">DISCOVER LOCAL</span>
-    <h1>내 지역 후기 게시판</h1>
-    <p>직접 다녀온 사람들의 진짜 후기를 남기고 확인해보세요.</p>
+    <span class="eyebrow">COMMUNITY</span>
+    <h1>질문하기</h1>
+    <p>궁금한 점을 남겨주시면 확인 후 답변드려요.</p>
   </div>
 
   <div class="card write-card">
     <div id="loginPrompt">
-      <p>로그인하면 후기를 남길 수 있어요.</p>
+      <p>로그인하면 질문을 남길 수 있어요.</p>
       <div class="field">
         <label for="liEmail">이메일</label>
         <input type="email" id="liEmail" autocomplete="email">
@@ -125,46 +130,21 @@
     </div>
 
     <form id="writeForm" hidden>
-      <p>후기를 남겨주세요, <b id="writeWho"></b>님</p>
-      <div class="field-row">
-        <div class="field">
-          <label for="rvCategory">카테고리</label>
-          <select id="rvCategory" required>
-            <option value="볼거리">볼거리</option>
-            <option value="먹거리">먹거리</option>
-            <option value="즐길거리">즐길거리</option>
-            <option value="숙소">숙소</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="rvRating">별점</label>
-          <select id="rvRating" required>
-            <option value="5">★★★★★ (5)</option>
-            <option value="4">★★★★☆ (4)</option>
-            <option value="3">★★★☆☆ (3)</option>
-            <option value="2">★★☆☆☆ (2)</option>
-            <option value="1">★☆☆☆☆ (1)</option>
-          </select>
-        </div>
+      <p>질문을 남겨주세요, <b id="writeWho"></b>님</p>
+      <div class="field">
+        <label for="qTitle">제목</label>
+        <input type="text" id="qTitle" maxlength="60" required>
       </div>
       <div class="field">
-        <label for="rvTitle">제목</label>
-        <input type="text" id="rvTitle" maxlength="60" required>
-      </div>
-      <div class="field">
-        <label for="rvContent">내용</label>
-        <textarea id="rvContent" maxlength="1000" required></textarea>
-      </div>
-      <div class="field">
-        <label for="rvPhotoUrl">사진 URL (선택)</label>
-        <input type="url" id="rvPhotoUrl" placeholder="https://...">
+        <label for="qContent">내용</label>
+        <textarea id="qContent" maxlength="1000" required></textarea>
       </div>
       <p class="msg" id="writeMsg"></p>
-      <button type="submit" class="btn btn-primary" id="writeSubmitBtn" style="width:100%">후기 등록하기</button>
+      <button type="submit" class="btn btn-primary" id="writeSubmitBtn" style="width:100%">질문 등록하기</button>
     </form>
   </div>
 
-  <div class="review-list" id="reviewList"><p class="empty">후기를 불러오는 중입니다...</p></div>
+  <div class="q-list" id="qList"><p class="empty">질문을 불러오는 중입니다...</p></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -186,12 +166,9 @@
   var writeWho = document.getElementById('writeWho');
   var writeMsg = document.getElementById('writeMsg');
   var writeSubmitBtn = document.getElementById('writeSubmitBtn');
-  var rvCategory = document.getElementById('rvCategory');
-  var rvRating = document.getElementById('rvRating');
-  var rvTitle = document.getElementById('rvTitle');
-  var rvContent = document.getElementById('rvContent');
-  var rvPhotoUrl = document.getElementById('rvPhotoUrl');
-  var reviewList = document.getElementById('reviewList');
+  var qTitle = document.getElementById('qTitle');
+  var qContent = document.getElementById('qContent');
+  var qList = document.getElementById('qList');
 
   var currentUser = null;
 
@@ -204,11 +181,6 @@
   function getDisplayName(user){
     var meta = user.user_metadata || {};
     return meta.full_name || meta.name || user.email.split('@')[0];
-  }
-
-  function starsHtml(rating){
-    var n = Math.max(0, Math.min(5, parseInt(rating, 10) || 0));
-    return '★★★★★'.slice(0, n) + '☆☆☆☆☆'.slice(0, 5 - n);
   }
 
   function renderAuthState(user){
@@ -226,31 +198,45 @@
     }
   }
 
-  function loadReviews(){
-    supabaseClient.from('reviews')
-      .select('author_name, category, rating, title, content, photo_url, created_at')
+  function loadQuestions(){
+    supabaseClient.from('questions')
+      .select('id, author_name, title, content, answer, answered_at, created_at')
       .order('created_at', { ascending: false })
       .then(function(res){
         if (res.error){
-          reviewList.innerHTML = '<p class="empty">후기를 불러오지 못했습니다: ' + escapeHtml(res.error.message) + '</p>';
+          qList.innerHTML = '<p class="empty">질문을 불러오지 못했습니다: ' + escapeHtml(res.error.message) + '</p>';
           return;
         }
         var rows = res.data || [];
         if (!rows.length){
-          reviewList.innerHTML = '<p class="empty">아직 등록된 후기가 없어요. 첫 후기를 남겨보세요!</p>';
+          qList.innerHTML = '<p class="empty">아직 등록된 질문이 없어요. 첫 질문을 남겨보세요!</p>';
           return;
         }
-        reviewList.innerHTML = rows.map(function(r){
-          var created = r.created_at ? new Date(r.created_at).toLocaleDateString('ko-KR') : '';
-          var photoHtml = r.photo_url ? '<img class="r-photo" src="' + escapeHtml(r.photo_url) + '" alt="" loading="lazy">' : '';
-          return '<article class="review-item">' +
-            photoHtml +
-            '<div class="r-top"><span class="r-cat">' + escapeHtml(r.category) + '</span><span class="r-stars">' + starsHtml(r.rating) + '</span></div>' +
-            '<h3 class="r-title">' + escapeHtml(r.title) + '</h3>' +
-            '<p class="r-content">' + escapeHtml(r.content) + '</p>' +
-            '<div class="r-meta"><span>' + escapeHtml(r.author_name) + '</span><span>' + escapeHtml(created) + '</span></div>' +
+        qList.innerHTML = rows.map(function(q){
+          var created = q.created_at ? new Date(q.created_at).toLocaleDateString('ko-KR') : '';
+          var answered = !!q.answer;
+          var answerHtml = answered
+            ? '<div class="q-answer"><p class="q-answer-label">관리자 답변</p><p class="q-answer-text">' + escapeHtml(q.answer) + '</p></div>'
+            : '';
+          return '<article class="q-item" data-id="' + q.id + '">' +
+            '<button type="button" class="q-row">' +
+              '<span class="q-title">' + escapeHtml(q.title) + '</span>' +
+              '<span class="q-meta">' +
+                '<span class="q-badge' + (answered ? ' answered' : '') + '">' + (answered ? '답변완료' : '답변대기') + '</span>' +
+                '<span>' + escapeHtml(q.author_name) + '</span>' +
+                '<span>' + escapeHtml(created) + '</span>' +
+                '<svg class="q-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+              '</span>' +
+            '</button>' +
+            '<div class="q-body"><div class="q-body-inner"><p class="q-content">' + escapeHtml(q.content) + '</p>' + answerHtml + '</div></div>' +
             '</article>';
         }).join('');
+
+        qList.querySelectorAll('.q-row').forEach(function(row){
+          row.addEventListener('click', function(){
+            row.closest('.q-item').classList.toggle('open');
+          });
+        });
       });
   }
 
@@ -280,25 +266,22 @@
   writeForm.addEventListener('submit', function(e){
     e.preventDefault();
     if (!currentUser) return;
-    var title = rvTitle.value.trim();
-    var content = rvContent.value.trim();
+    var title = qTitle.value.trim();
+    var content = qContent.value.trim();
     writeMsg.textContent = '';
     if (!title){ writeMsg.textContent = '제목을 입력해주세요.'; return; }
     if (!content){ writeMsg.textContent = '내용을 입력해주세요.'; return; }
     writeSubmitBtn.disabled = true;
-    supabaseClient.from('reviews').insert({
+    supabaseClient.from('questions').insert({
       user_id: currentUser.id,
       author_name: getDisplayName(currentUser),
-      category: rvCategory.value,
-      rating: parseInt(rvRating.value, 10),
       title: title,
-      content: content,
-      photo_url: rvPhotoUrl.value.trim() || null
+      content: content
     }).then(function(res){
       writeSubmitBtn.disabled = false;
       if (res.error){ writeMsg.textContent = '등록에 실패했습니다: ' + res.error.message; return; }
       writeForm.reset();
-      loadReviews();
+      loadQuestions();
     });
   });
 
@@ -311,7 +294,7 @@
     renderAuthState(currentUser);
   });
 
-  loadReviews();
+  loadQuestions();
 })();
 </script>
 </body>
