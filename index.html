@@ -304,16 +304,12 @@
   .mypage-category li::before{content:''; position:absolute; left:0; top:.55em; width:5px; height:5px; border-radius:50%; background:var(--gold-soft)}
   .mypage-empty{font-size:.85rem; color:var(--ink-faint); text-align:center; padding:14px 0}
 
-  .reservation-modal{overflow-x:hidden}
-  @media (min-width:1024px){
-    .reservation-modal{width:860px; max-width:90vw; max-height:90vh; overflow-y:auto}
-    #reservationForm{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px}
-    #reservationForm .auth-field{margin-bottom:0; min-width:0}
-    #reservationForm .auth-field input, #reservationForm .auth-field textarea{width:100%; min-width:0}
-    #reservationForm .auth-field-full, #reservationForm .auth-error, #reservationForm .auth-submit{grid-column:1 / -1}
-  }
+  .reservation-modal{width:100%; max-width:min(500px, 92vw); max-height:90vh; overflow-x:hidden; overflow-y:auto}
+  #reservationForm{display:flex; flex-direction:column}
+  .reservation-modal .auth-field{margin-bottom:10px}
+  .reservation-modal .auth-field input{padding-top:9px; padding-bottom:9px}
   .auth-field-plain textarea, .auth-field.auth-field-plain input{
-    width:100%; padding:12px 14px; border:1.5px solid var(--line); border-radius:9px;
+    width:100%; padding:9px 14px; border:1.5px solid var(--line); border-radius:9px;
     background:var(--bg); color:var(--ink); font:inherit; font-size:.92rem; resize:vertical;
   }
   .auth-field-plain textarea:focus, .auth-field.auth-field-plain input:focus{outline:none; border-color:var(--indigo)}
@@ -1156,7 +1152,7 @@
         <input type="number" name="visitor_count" placeholder="방문 인원" min="1" step="1" required>
       </div>
       <div class="auth-field auth-field-plain auth-field-full">
-        <textarea name="note" placeholder="요청사항 (선택)" rows="3"></textarea>
+        <textarea name="note" placeholder="요청사항 (선택)" rows="2"></textarea>
       </div>
       <p class="auth-error" id="reservationError"></p>
       <button type="submit" class="auth-submit">예약하기</button>

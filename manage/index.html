@@ -29,6 +29,7 @@
     width:100%; max-width:360px; background:var(--surface); border-radius:16px; box-shadow:var(--shadow);
     padding:32px 28px; text-align:center;
   }
+  @media (max-width:400px){ .login-card{padding:26px 18px} }
   .login-card p{color:var(--ink-soft); font-size:.88rem; margin:6px 0 22px}
   .field{position:relative; margin-bottom:12px}
   .field input{
@@ -47,9 +48,45 @@
 
   .dash{max-width:1180px; margin:0 auto; padding:28px 20px 60px; display:none}
   .dash.show{display:block}
-  .dash-head{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:24px; flex-wrap:wrap}
-  .dash-head .who{font-size:.82rem; color:var(--ink-soft)}
-  .dash-head .btn{width:auto; padding:9px 16px; background:var(--surface); color:var(--brick); border:1.5px solid var(--line)}
+  .dash-head{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:20px; flex-wrap:wrap}
+  .dash-head .who{font-size:.82rem; color:var(--ink-soft); margin:4px 0 0}
+  .dash-head .btn{width:auto; padding:9px 16px; background:var(--surface); color:var(--brick); border:1.5px solid var(--line); margin-top:0}
+  .dash-head .btn.btn-plain{color:var(--ink-soft)}
+
+  .dash-body{display:flex; align-items:flex-start; gap:24px}
+  .dash-sidebar{display:flex; flex-direction:column; gap:10px; width:180px; flex:none}
+  .dash-menu-item{
+    padding:16px 14px; border-radius:10px; border:1.5px solid var(--line); background:var(--surface);
+    color:var(--ink-soft); font-weight:700; font-size:.9rem; text-align:center; box-shadow:var(--shadow);
+  }
+  .dash-menu-item.active{background:var(--indigo); color:#fff; border-color:var(--indigo)}
+
+  .dash-content{flex:1; min-width:0}
+  .dash-content-title{font-family:var(--font-display); font-size:1.3rem; text-align:center; margin:0 0 18px}
+
+  .dash-panel{display:none}
+  .dash-panel.show{display:block}
+
+  @media (max-width:640px){
+    .dash{padding:20px 14px 48px}
+    .dash-body{flex-direction:column}
+    .dash-sidebar{flex-direction:row; width:100%}
+    .dash-menu-item{flex:1}
+  }
+
+  .search-bar{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px}
+  .search-bar input{
+    flex:1; min-width:140px; padding:9px 12px; border:1.5px solid var(--line); border-radius:8px;
+    background:var(--surface); color:var(--ink); font:inherit; font-size:.85rem;
+  }
+  .search-bar input:focus{outline:none; border-color:var(--indigo)}
+  .search-bar .btn-reset{
+    flex:none; width:auto; padding:9px 16px; border-radius:8px; border:1.5px solid var(--line);
+    background:var(--bg-alt); color:var(--ink-soft); font-weight:700; font-size:.85rem;
+  }
+
+  .modal-overlay{position:fixed; inset:0; background:rgba(38,34,27,.45); display:none; align-items:center; justify-content:center; padding:20px; z-index:50}
+  .modal-overlay.show{display:flex}
 
   .table-wrap{background:var(--surface); border-radius:14px; box-shadow:var(--shadow); overflow-x:auto}
   table{width:100%; border-collapse:collapse; font-size:.84rem; white-space:nowrap}
@@ -115,22 +152,77 @@
 
 <div class="dash" id="dash">
   <div class="dash-head">
-    <h1>예약 관리</h1>
-    <div style="display:flex; align-items:center; gap:14px">
-      <span class="who" id="whoEmail"></span>
+    <div>
+      <h1>관리자SYSTEM</h1>
+      <p class="who" id="whoEmail"></p>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap">
+      <button type="button" class="btn btn-plain" id="pwChangeBtn">비밀번호 변경</button>
       <button type="button" class="btn" id="logoutBtn">로그아웃</button>
     </div>
   </div>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>상태</th><th>단체명</th><th>담당자명</th><th>연락처</th>
-          <th>방문 희망일</th><th>희망시간</th><th>인원</th><th>요청사항</th><th>신청일시</th>
-        </tr>
-      </thead>
-      <tbody id="resTableBody"></tbody>
-    </table>
+
+  <div class="dash-body">
+    <nav class="dash-sidebar">
+      <button type="button" class="dash-menu-item active" data-tab="members">회원 관리</button>
+      <button type="button" class="dash-menu-item" data-tab="reservations">예약 현황</button>
+    </nav>
+
+    <div class="dash-content">
+      <h2 class="dash-content-title" id="dashContentTitle">회원 관리</h2>
+
+      <div class="dash-panel show" id="panelMembers">
+        <div class="search-bar">
+          <input type="text" id="memSearchName" placeholder="이름 검색">
+          <input type="text" id="memSearchEmail" placeholder="이메일 검색">
+          <input type="date" id="memSearchDate" title="가입일 검색">
+          <button type="button" class="btn-reset" id="memSearchReset">초기화</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>이름</th><th>이메일</th><th>가입일</th></tr>
+            </thead>
+            <tbody id="memberTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="dash-panel" id="panelReservations">
+        <div class="search-bar">
+          <input type="text" id="resSearchName" placeholder="담당자명 검색">
+          <input type="text" id="resSearchEmail" placeholder="이메일 검색">
+          <input type="text" id="resSearchPhone" placeholder="연락처 검색">
+          <input type="date" id="resSearchDate" title="방문 희망일 검색">
+          <button type="button" class="btn-reset" id="resSearchReset">초기화</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>상태</th><th>단체명</th><th>담당자명</th><th>이메일</th><th>연락처</th>
+                <th>방문 희망일</th><th>희망시간</th><th>인원</th><th>요청사항</th><th>신청일시</th>
+              </tr>
+            </thead>
+            <tbody id="resTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="pwChangeOverlay">
+  <div class="login-card" style="max-width:360px">
+    <h1 style="font-size:1.2rem">관리자 비밀번호 변경</h1>
+    <form id="pwChangeForm">
+      <div class="field"><input type="password" name="oldPassword" placeholder="현재 관리자 암호" required></div>
+      <div class="field"><input type="password" name="newPassword" placeholder="새 관리자 암호" required minlength="4"></div>
+      <div class="field"><input type="password" name="newPasswordConfirm" placeholder="새 관리자 암호 확인" required minlength="4"></div>
+      <p class="msg" id="pwChangeMsg"></p>
+      <button type="submit" class="btn btn-primary">변경하기</button>
+    </form>
+    <button type="button" class="btn" style="margin-top:10px; background:var(--surface); border:1.5px solid var(--line)" id="pwChangeCancel">취소</button>
   </div>
 </div>
 
@@ -158,7 +250,36 @@
   var deniedLogout = document.getElementById('deniedLogout');
   var whoEmail = document.getElementById('whoEmail');
   var resTableBody = document.getElementById('resTableBody');
+  var memberTableBody = document.getElementById('memberTableBody');
   var pendingAdminUser = null;
+  var adminVerified = false;
+  var idleTimer = null;
+  var IDLE_LIMIT_MS = 10 * 60 * 1000;
+
+  var dashTabs = document.querySelectorAll('.dash-menu-item');
+  var dashContentTitle = document.getElementById('dashContentTitle');
+  var panelReservations = document.getElementById('panelReservations');
+  var panelMembers = document.getElementById('panelMembers');
+
+  var resSearchName = document.getElementById('resSearchName');
+  var resSearchEmail = document.getElementById('resSearchEmail');
+  var resSearchPhone = document.getElementById('resSearchPhone');
+  var resSearchDate = document.getElementById('resSearchDate');
+  var resSearchReset = document.getElementById('resSearchReset');
+
+  var memSearchName = document.getElementById('memSearchName');
+  var memSearchEmail = document.getElementById('memSearchEmail');
+  var memSearchDate = document.getElementById('memSearchDate');
+  var memSearchReset = document.getElementById('memSearchReset');
+
+  var pwChangeBtn = document.getElementById('pwChangeBtn');
+  var pwChangeOverlay = document.getElementById('pwChangeOverlay');
+  var pwChangeForm = document.getElementById('pwChangeForm');
+  var pwChangeMsg = document.getElementById('pwChangeMsg');
+  var pwChangeCancel = document.getElementById('pwChangeCancel');
+
+  var allReservations = [];
+  var allMembers = [];
 
   var STATUS_OPTIONS = ['접수중', '확정', '보류', '취소'];
 
@@ -176,9 +297,17 @@
     return div.innerHTML;
   }
 
+  function toDateStr(ts){
+    if (!ts) return '';
+    var d = new Date(ts);
+    var m = String(d.getMonth() + 1).padStart(2, '0');
+    var day = String(d.getDate()).padStart(2, '0');
+    return d.getFullYear() + '-' + m + '-' + day;
+  }
+
   function renderTable(rows){
     if (!rows.length){
-      resTableBody.innerHTML = '<tr><td class="empty" colspan="9">예약 신청 내역이 없습니다.</td></tr>';
+      resTableBody.innerHTML = '<tr><td class="empty" colspan="10">예약 신청 내역이 없습니다.</td></tr>';
       return;
     }
     resTableBody.innerHTML = rows.map(function(r){
@@ -190,6 +319,7 @@
         '<td><select class="status-select" data-status="' + escapeHtml(r.status) + '">' + options + '</select></td>' +
         '<td>' + escapeHtml(r.org_name) + '</td>' +
         '<td>' + escapeHtml(r.name) + '</td>' +
+        '<td>' + escapeHtml(r.email) + '</td>' +
         '<td>' + escapeHtml(r.phone) + '</td>' +
         '<td>' + escapeHtml(r.res_date) + '</td>' +
         '<td>' + escapeHtml(r.res_time) + '</td>' +
@@ -211,22 +341,76 @@
             return;
           }
           sel.setAttribute('data-status', newStatus);
+          var match = allReservations.filter(function(x){ return String(x.id) === String(id); })[0];
+          if (match) match.status = newStatus;
         });
       });
     });
   }
 
+  function renderReservations(){
+    var nameQ = resSearchName.value.trim().toLowerCase();
+    var emailQ = resSearchEmail.value.trim().toLowerCase();
+    var phoneQ = resSearchPhone.value.trim();
+    var dateQ = resSearchDate.value;
+    var filtered = allReservations.filter(function(r){
+      if (nameQ && String(r.name || '').toLowerCase().indexOf(nameQ) === -1) return false;
+      if (emailQ && String(r.email || '').toLowerCase().indexOf(emailQ) === -1) return false;
+      if (phoneQ && String(r.phone || '').indexOf(phoneQ) === -1) return false;
+      if (dateQ && String(r.res_date || '') !== dateQ) return false;
+      return true;
+    });
+    renderTable(filtered);
+  }
+
   function loadReservations(){
-    supabaseClient.from('reservations')
-      .select('id, org_name, name, phone, res_date, res_time, visitor_count, note, status, created_at')
-      .order('res_date', { ascending: true })
-      .then(function(res){
-        if (res.error){
-          resTableBody.innerHTML = '<tr><td class="empty" colspan="9">불러오기 실패: ' + escapeHtml(res.error.message) + '</td></tr>';
-          return;
-        }
-        renderTable(res.data || []);
-      });
+    supabaseClient.rpc('admin_list_reservations').then(function(res){
+      if (res.error){
+        resTableBody.innerHTML = '<tr><td class="empty" colspan="10">불러오기 실패: ' + escapeHtml(res.error.message) + '</td></tr>';
+        return;
+      }
+      allReservations = res.data || [];
+      renderReservations();
+    });
+  }
+
+  function renderMembersTable(rows){
+    if (!rows.length){
+      memberTableBody.innerHTML = '<tr><td class="empty" colspan="3">회원 정보가 없습니다.</td></tr>';
+      return;
+    }
+    memberTableBody.innerHTML = rows.map(function(m){
+      var joined = m.created_at ? new Date(m.created_at).toLocaleString('ko-KR') : '';
+      return '<tr>' +
+        '<td>' + escapeHtml(m.name) + '</td>' +
+        '<td>' + escapeHtml(m.email) + '</td>' +
+        '<td>' + escapeHtml(joined) + '</td>' +
+        '</tr>';
+    }).join('');
+  }
+
+  function renderMembers(){
+    var nameQ = memSearchName.value.trim().toLowerCase();
+    var emailQ = memSearchEmail.value.trim().toLowerCase();
+    var dateQ = memSearchDate.value;
+    var filtered = allMembers.filter(function(m){
+      if (nameQ && String(m.name || '').toLowerCase().indexOf(nameQ) === -1) return false;
+      if (emailQ && String(m.email || '').toLowerCase().indexOf(emailQ) === -1) return false;
+      if (dateQ && toDateStr(m.created_at) !== dateQ) return false;
+      return true;
+    });
+    renderMembersTable(filtered);
+  }
+
+  function loadMembers(){
+    supabaseClient.rpc('admin_list_members').then(function(res){
+      if (res.error){
+        memberTableBody.innerHTML = '<tr><td class="empty" colspan="3">불러오기 실패: ' + escapeHtml(res.error.message) + '</td></tr>';
+        return;
+      }
+      allMembers = res.data || [];
+      renderMembers();
+    });
   }
 
   function checkAdminAndRender(user){
@@ -236,18 +420,48 @@
         return;
       }
       pendingAdminUser = user;
+      adminVerified = false;
       adminPwEmail.textContent = user.email;
       adminPwMsg.textContent = '';
       showScreen('adminpw');
     });
   }
 
+  function clearIdleTimer(){
+    if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; }
+  }
+
+  function resetIdleTimer(){
+    clearIdleTimer();
+    if (!adminVerified) return;
+    idleTimer = setTimeout(function(){
+      adminVerified = false;
+      if (pendingAdminUser){
+        adminPwEmail.textContent = pendingAdminUser.email;
+        adminPwMsg.textContent = '';
+        showScreen('adminpw');
+      }
+    }, IDLE_LIMIT_MS);
+  }
+
+  ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart'].forEach(function(evt){
+    document.addEventListener(evt, function(){ if (adminVerified) resetIdleTimer(); }, { passive: true });
+  });
+
   supabaseClient.auth.getSession().then(function(res){
     var session = res.data && res.data.session;
     if (session) { checkAdminAndRender(session.user); } else { showScreen('login'); }
   });
   supabaseClient.auth.onAuthStateChange(function(event, session){
-    if (session) { checkAdminAndRender(session.user); } else { showScreen('login'); }
+    if (session){
+      if (adminVerified && pendingAdminUser && session.user.id === pendingAdminUser.id) return;
+      checkAdminAndRender(session.user);
+    } else {
+      adminVerified = false;
+      pendingAdminUser = null;
+      clearIdleTimer();
+      showScreen('login');
+    }
   });
 
   loginForm.addEventListener('submit', function(e){
@@ -278,15 +492,89 @@
         adminPwMsg.textContent = '관리자 암호가 올바르지 않습니다.';
         return;
       }
-      whoEmail.textContent = pendingAdminUser.email;
+      whoEmail.textContent = pendingAdminUser.email + ' 계정으로 로그인하셨습니다.';
+      adminVerified = true;
+      resetIdleTimer();
       showScreen('dash');
       loadReservations();
+      loadMembers();
+    });
+  });
+
+  dashTabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      dashTabs.forEach(function(t){ t.classList.remove('active'); });
+      tab.classList.add('active');
+      var target = tab.getAttribute('data-tab');
+      dashContentTitle.textContent = tab.textContent;
+      panelReservations.classList.toggle('show', target === 'reservations');
+      panelMembers.classList.toggle('show', target === 'members');
+    });
+  });
+
+  [resSearchName, resSearchEmail, resSearchPhone, resSearchDate].forEach(function(el){
+    el.addEventListener('input', renderReservations);
+  });
+  resSearchReset.addEventListener('click', function(){
+    resSearchName.value = '';
+    resSearchEmail.value = '';
+    resSearchPhone.value = '';
+    resSearchDate.value = '';
+    renderReservations();
+  });
+
+  [memSearchName, memSearchEmail, memSearchDate].forEach(function(el){
+    el.addEventListener('input', renderMembers);
+  });
+  memSearchReset.addEventListener('click', function(){
+    memSearchName.value = '';
+    memSearchEmail.value = '';
+    memSearchDate.value = '';
+    renderMembers();
+  });
+
+  pwChangeBtn.addEventListener('click', function(){
+    pwChangeMsg.textContent = '';
+    pwChangeMsg.classList.remove('ok');
+    pwChangeForm.reset();
+    pwChangeOverlay.classList.add('show');
+  });
+  pwChangeCancel.addEventListener('click', function(){
+    pwChangeOverlay.classList.remove('show');
+  });
+  pwChangeForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    var data = new FormData(pwChangeForm);
+    var oldPw = String(data.get('oldPassword') || '');
+    var newPw = String(data.get('newPassword') || '');
+    var newPwConfirm = String(data.get('newPasswordConfirm') || '');
+    pwChangeMsg.classList.remove('ok');
+    pwChangeMsg.textContent = '';
+    if (newPw !== newPwConfirm){
+      pwChangeMsg.textContent = '새 암호가 서로 일치하지 않습니다.';
+      return;
+    }
+    supabaseClient.rpc('admin_change_password', { p_old_password: oldPw, p_new_password: newPw }).then(function(res){
+      if (res.error || res.data !== true){
+        pwChangeMsg.textContent = '현재 암호가 올바르지 않습니다.';
+        return;
+      }
+      pwChangeMsg.classList.add('ok');
+      pwChangeMsg.textContent = '변경되었습니다.';
+      setTimeout(function(){
+        pwChangeOverlay.classList.remove('show');
+      }, 1200);
     });
   });
 
   function doLogout(){
     pendingAdminUser = null;
+    adminVerified = false;
+    clearIdleTimer();
+    allReservations = [];
+    allMembers = [];
     adminPwForm.reset();
+    pwChangeOverlay.classList.remove('show');
     supabaseClient.auth.signOut();
   }
   logoutBtn.addEventListener('click', doLogout);
