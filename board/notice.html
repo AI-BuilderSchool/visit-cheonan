@@ -63,7 +63,122 @@
     padding:7px 10px; border:1.5px solid var(--line); border-radius:6px; min-height:34px; font-variant-numeric:tabular-nums;
   }
   .header-date-chip .ico{width:15px; height:15px; color:var(--gold)}
+  .weather-widget{position:relative; display:inline-flex; align-items:center}
+  .weather-chip{
+    display:flex; align-items:center; gap:6px; font-size:.78rem; font-weight:700; color:var(--ink-soft);
+    padding:7px 10px; border:1.5px solid var(--line); border-radius:6px; min-height:34px; font-variant-numeric:tabular-nums;
+    background:none; font:inherit; cursor:pointer;
+  }
+  .weather-chip .ico{width:15px; height:15px; color:var(--gold)}
+  .weather-panel{
+    position:absolute; right:0; top:calc(100% + 10px); z-index:60;
+    display:none; min-width:190px; padding:14px 16px; border-radius:14px;
+    background:color-mix(in srgb, var(--surface) 96%, transparent);
+    box-shadow:var(--shadow); border:1px solid var(--line);
+    backdrop-filter:blur(10px); text-align:left; color:var(--ink);
+  }
+  .weather-panel.open{display:block}
+  .weather-panel-desc{font-size:.85rem; font-weight:700; margin:0 0 10px}
+  .weather-panel-grid{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px}
+  .weather-panel-grid li{display:flex; justify-content:space-between; gap:16px; font-size:.78rem; color:var(--ink-soft)}
+  .weather-panel-grid .wp-value{font-weight:700; color:var(--ink); font-variant-numeric:tabular-nums}
+  @media (max-width:480px){ .weather-panel{right:-30px} }
   .head-actions .icon-btn{width:34px; height:34px; justify-content:center; border:none; background:none; color:var(--ink-soft)}
+  .auth-widget{display:inline-flex; align-items:center; gap:8px; min-width:0}
+  .auth-greeting{font-size:.85rem; font-weight:700; color:var(--ink); white-space:nowrap; max-width:100px; overflow:hidden; text-overflow:ellipsis}
+
+  .auth-overlay{
+    position:fixed; inset:0; z-index:250; display:flex; align-items:center; justify-content:center;
+    padding:20px; background:rgba(18,15,10,.55); backdrop-filter:blur(4px);
+    opacity:0; visibility:hidden; transition:opacity .3s ease, visibility 0s linear .3s;
+  }
+  .auth-overlay.open{opacity:1; visibility:visible; transition:opacity .3s ease, visibility 0s}
+  .auth-modal{
+    width:100%; max-width:380px; background:var(--surface); border-radius:16px; box-shadow:var(--shadow);
+    padding:32px 28px 28px; position:relative; color:var(--ink);
+    transform:translateY(12px); transition:transform .3s ease;
+    max-height:calc(100vh - 40px); overflow-y:auto;
+  }
+  .auth-overlay.open .auth-modal{transform:none}
+  .auth-close{
+    position:absolute; top:16px; right:16px; width:34px; height:34px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; color:var(--ink-soft);
+  }
+  .auth-close:hover{color:var(--indigo); background:var(--bg-alt)}
+  .auth-close .ico{width:16px; height:16px}
+  .auth-title{font-family:var(--font-display); font-size:1.5rem; margin:0 0 4px}
+
+  .mypage-modal{max-width:400px}
+  .mypage-header{
+    margin:-32px -28px 0; padding:30px 28px 26px; border-radius:16px 16px 0 0;
+    background:linear-gradient(135deg, #788ab1, var(--indigo-soft));
+    text-align:center;
+  }
+  .mypage-header .eyebrow{color:var(--gold-soft)}
+  .mypage-header .auth-title{color:#fff; margin-top:6px; font-family:var(--font-body)}
+  .mypage-modal .auth-close{color:rgba(255,255,255,.8)}
+  .mypage-modal .auth-close:hover{color:#fff; background:rgba(255,255,255,.15)}
+  .mypage-profile{display:flex; align-items:center; gap:14px; padding:20px 0 20px}
+  .mypage-avatar{
+    width:52px; height:52px; border-radius:50%; flex:0 0 auto; overflow:hidden;
+    background:var(--indigo); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-size:1.3rem; font-weight:700;
+  }
+  .mypage-avatar img{width:100%; height:100%; object-fit:cover}
+  .mypage-avatar-icon{background:#fff; border:1px solid var(--line)}
+  .mypage-avatar-icon .ico{width:26px; height:26px}
+  .mypage-profile-info{flex:1; min-width:0}
+  .mypage-name{font-size:1rem; font-weight:800; color:var(--ink); margin:0 0 4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .mypage-email{font-size:.92rem; font-weight:600; color:var(--ink-soft); margin:0 0 8px; word-break:break-all}
+  .mypage-provider{display:flex; width:100%; align-items:center; justify-content:center; gap:5px; font-size:.85rem; font-weight:700; color:var(--ink-soft); background:var(--bg-alt); padding:6px 10px; border-radius:20px}
+  .mypage-provider .ico{width:12px; height:12px}
+  .mypage-password{padding-top:16px; border-top:1px solid var(--line)}
+  .mypage-password-toggle{font-size:.82rem; font-weight:700; color:var(--indigo); background:none; border:none; padding:0}
+  .mypage-password-toggle:hover{text-decoration:underline}
+  .mypage-password-form{margin-top:12px; display:flex; flex-direction:column; gap:4px}
+  .mypage-tabs{display:flex; margin-top:18px; border-bottom:1px solid var(--line)}
+  .mypage-tab{flex:1; padding:10px 4px; font-size:.85rem; font-weight:700; color:var(--ink-faint); background:none; border:none; border-bottom:2px solid transparent; margin-bottom:-1px; text-align:center}
+  .mypage-tab.active{color:var(--indigo); border-bottom-color:var(--indigo)}
+  .mypage-tab-panel{padding-top:18px}
+  .mypage-tab-panel[hidden]{display:none}
+  .mypage-summary{
+    display:flex; align-items:baseline; gap:8px; padding-bottom:16px;
+    border-bottom:1px solid var(--line); margin-bottom:18px;
+  }
+  .mypage-count{font-family:var(--font-display); font-size:2rem; font-weight:700; color:var(--indigo)}
+  .mypage-count-label{font-size:.85rem; color:var(--ink-soft)}
+  .mypage-category{margin-bottom:16px}
+  .mypage-category:last-child{margin-bottom:0}
+  .mypage-category h4{font-size:.85rem; font-weight:800; color:var(--ink); margin:0 0 8px; display:flex; justify-content:space-between}
+  .mypage-category h4 .cnt{color:var(--gold)}
+  .mypage-category ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px}
+  .mypage-category li{font-size:.85rem; color:var(--ink-soft); padding-left:14px; position:relative}
+  .mypage-category li::before{content:''; position:absolute; left:0; top:.55em; width:5px; height:5px; border-radius:50%; background:var(--gold-soft)}
+  .mypage-empty{font-size:.85rem; color:var(--ink-faint); text-align:center; padding:14px 0}
+  .mypage-logout{display:block; margin-top:18px; width:100%; text-align:center; padding:11px 18px; border-radius:9px; border:none; font-weight:800; font-size:.88rem; background:var(--indigo); color:#fff}
+
+  .reservation-list{display:flex; flex-direction:column; gap:8px; max-height:220px; overflow-y:auto}
+  .reservation-item{border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:.82rem; color:var(--ink-soft)}
+  .reservation-item .r-top{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:4px}
+  .reservation-item .r-org{font-weight:800; color:var(--ink); font-size:.88rem}
+  .reservation-item .r-date{display:block; font-weight:700; color:var(--indigo); font-size:.8rem; margin-bottom:4px}
+  .reservation-item .r-note{margin-top:4px; color:var(--ink-faint)}
+  .r-status{flex:0 0 auto; font-size:.72rem; font-weight:700; padding:3px 9px; border-radius:20px}
+  .r-status-pending{background:var(--bg-alt); color:var(--ink-soft)}
+  .r-status-confirmed{background:color-mix(in srgb, var(--sage) 18%, transparent); color:var(--sage)}
+  .r-status-hold{background:color-mix(in srgb, var(--gold) 18%, transparent); color:var(--gold)}
+  .r-status-cancelled{background:color-mix(in srgb, var(--brick) 18%, transparent); color:var(--brick)}
+  .msg{font-size:.8rem; color:var(--brick); min-height:1em; margin:8px 0 0}
+  .msg.ok{color:var(--sage)}
+  .field{margin-bottom:12px}
+  .field input{
+    width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius:9px;
+    background:var(--bg); color:var(--ink); font:inherit; font-size:.9rem;
+  }
+  .field input:focus{outline:none; border-color:var(--indigo)}
+  .btn{padding:11px 18px; border-radius:9px; border:none; font-weight:800; font-size:.88rem; cursor:pointer}
+  .btn-primary{background:var(--indigo); color:#fff}
+  .btn-primary:disabled{opacity:.6}
 
   .menu-overlay{
     position:fixed; inset:0; z-index:200; color:#fff; background:var(--indigo);
@@ -127,11 +242,19 @@
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 9h18M12 9v12M12 9C9 9 7 7.5 7 5.5A2.5 2.5 0 0 1 12 5a2.5 2.5 0 0 1 5 .5C17 7.5 15 9 12 9Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18a4.5 4.5 0 0 1-.5-8.97A5.5 5.5 0 0 1 17.2 8.2 4 4 0 0 1 17 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 20v1M13 20v1M17 19v1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></symbol>
     <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 9.5h17M8 3v3.5M16 3v3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
     <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m20 20-4.3-4.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
     <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.3-8.6C1.2 8 3 4.5 6.6 4.5c2 0 3.6 1.2 4.4 2.8.8-1.6 2.4-2.8 4.4-2.8C19 4.5 20.8 8 21.3 11.4 19 15.6 12 20 12 20Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
     <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
     <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m4 6.5 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-google" viewBox="0 0 18 18">
+      <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+      <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
+      <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
+      <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
+    </symbol>
   </defs>
 </svg>
 
@@ -150,8 +273,24 @@
     </div>
   </div>
   <div class="head-actions">
-    <a class="header-login-btn" href="../index.html">LOGIN</a>
+    <div class="auth-widget">
+      <span class="auth-greeting" id="whoBadge"></span>
+      <button type="button" class="header-login-btn" id="authToggle" aria-label="Login">LOGIN</button>
+    </div>
     <button type="button" class="goods-badge" aria-label="내 지역 굿즈"><svg class="ico" viewBox="0 0 24 24"><use href="#i-gift"/></svg>GOODS</button>
+    <div class="weather-widget">
+      <button type="button" class="weather-chip" id="weatherToggle" aria-expanded="false" aria-controls="weatherPanel">
+        <svg class="ico" viewBox="0 0 24 24"><use href="#i-cloud"/></svg><span id="weatherTemp">--°C</span>
+      </button>
+      <div class="weather-panel" id="weatherPanel">
+        <p class="weather-panel-desc" id="weatherDesc">날씨 정보를 불러오는 중입니다</p>
+        <ul class="weather-panel-grid">
+          <li><span>체감</span><span class="wp-value" id="weatherFeels">-</span></li>
+          <li><span>습도</span><span class="wp-value" id="weatherHumidity">-</span></li>
+          <li><span>강수확률</span><span class="wp-value" id="weatherPrecip">-</span></li>
+        </ul>
+      </div>
+    </div>
     <span class="header-date-chip"><svg class="ico" viewBox="0 0 24 24"><use href="#i-calendar"/></svg><span id="headerDate"></span></span>
     <button type="button" class="icon-btn" aria-label="검색"><svg class="ico" viewBox="0 0 24 24"><use href="#i-search"/></svg></button>
     <button type="button" class="icon-btn" aria-label="찜하기"><svg class="ico" viewBox="0 0 24 24"><use href="#i-heart"/></svg></button>
@@ -175,6 +314,55 @@
         <li><a href="qna.html">질문하기</a></li>
       </ul>
     </div>
+  </div>
+</div>
+
+<div class="auth-overlay" id="mypageOverlay">
+  <div class="auth-modal mypage-modal" role="dialog" aria-modal="true" aria-labelledby="mypageTitle">
+    <button type="button" class="auth-close" id="mypageClose" aria-label="닫기"><svg class="ico" viewBox="0 0 24 24"><use href="#i-close"/></svg></button>
+    <div class="mypage-header">
+      <span class="eyebrow">MY PAGE</span>
+      <h2 class="auth-title" id="mypageTitle">마이페이지</h2>
+    </div>
+
+    <div class="mypage-profile">
+      <div class="mypage-avatar" id="mypageAvatar"></div>
+      <div class="mypage-profile-info">
+        <p class="mypage-name" id="mypageName"></p>
+        <p class="mypage-email" id="mypageEmail"></p>
+        <span class="mypage-provider" id="mypageProvider"></span>
+      </div>
+    </div>
+
+    <div class="mypage-password" id="mypagePasswordSection" hidden>
+      <button type="button" class="mypage-password-toggle" id="mypagePasswordToggle">비밀번호 변경</button>
+      <form class="mypage-password-form" id="mypagePasswordForm" hidden novalidate>
+        <div class="field">
+          <input type="password" name="password" placeholder="새 비밀번호 (6자 이상)" required minlength="6" autocomplete="new-password">
+        </div>
+        <p class="msg" id="mypagePasswordError"></p>
+        <button type="submit" class="btn btn-primary" style="width:100%">변경하기</button>
+      </form>
+    </div>
+
+    <div class="mypage-tabs">
+      <button type="button" class="mypage-tab active" data-mypage-tab="favorites">찜한 게시물</button>
+      <button type="button" class="mypage-tab" data-mypage-tab="reservations">예약 현황</button>
+    </div>
+
+    <div class="mypage-tab-panel" data-mypage-panel="favorites">
+      <div class="mypage-summary">
+        <span class="mypage-count" id="mypageTotalCount">0</span>
+        <span class="mypage-count-label">개의 게시물을 찜했어요</span>
+      </div>
+      <div class="mypage-categories" id="mypageCategories"></div>
+    </div>
+
+    <div class="mypage-tab-panel" data-mypage-panel="reservations" hidden>
+      <div class="reservation-list" id="mypageReservationList"></div>
+    </div>
+
+    <button type="button" class="mypage-logout" id="logoutBtn" hidden>로그아웃</button>
   </div>
 </div>
 
@@ -229,6 +417,50 @@
     function getPart(t){ var p = parts.find(function(x){ return x.type === t; }); return p ? p.value : ''; }
     headerDate.textContent = getPart('month') + '.' + getPart('day') + '(' + getPart('weekday') + ')';
   }
+
+  var weatherTemp = document.getElementById('weatherTemp');
+  var weatherDesc = document.getElementById('weatherDesc');
+  var weatherFeels = document.getElementById('weatherFeels');
+  var weatherHumidity = document.getElementById('weatherHumidity');
+  var weatherPrecip = document.getElementById('weatherPrecip');
+  if (weatherTemp) {
+    fetch('/api/weather')
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        if (typeof data.temperature === 'number') {
+          weatherTemp.textContent = data.temperature.toFixed(1) + '°C';
+        }
+        if (weatherDesc) weatherDesc.textContent = data.description || '날씨 정보를 표시할 수 없습니다';
+        if (weatherFeels) weatherFeels.textContent = typeof data.feelsLikeTemperature === 'number' ? data.feelsLikeTemperature.toFixed(1) + '°C' : '-';
+        if (weatherHumidity) weatherHumidity.textContent = typeof data.humidity === 'number' ? data.humidity + '%' : '-';
+        if (weatherPrecip) weatherPrecip.textContent = typeof data.precipitationProbability === 'number' ? data.precipitationProbability + '%' : '-';
+      })
+      .catch(function(){
+        if (weatherDesc) weatherDesc.textContent = '날씨 정보를 불러오지 못했습니다';
+      });
+  }
+
+  var weatherToggle = document.getElementById('weatherToggle');
+  var weatherPanel = document.getElementById('weatherPanel');
+  if (weatherToggle && weatherPanel) {
+    function openWeatherPanel(){
+      weatherPanel.classList.add('open');
+      weatherToggle.setAttribute('aria-expanded', 'true');
+    }
+    function closeWeatherPanel(){
+      weatherPanel.classList.remove('open');
+      weatherToggle.setAttribute('aria-expanded', 'false');
+    }
+    weatherToggle.addEventListener('click', function(e){
+      e.stopPropagation();
+      weatherPanel.classList.contains('open') ? closeWeatherPanel() : openWeatherPanel();
+    });
+    document.addEventListener('click', function(e){
+      if (!weatherPanel.contains(e.target) && !weatherToggle.contains(e.target)) {
+        closeWeatherPanel();
+      }
+    });
+  }
 })();
 </script>
 
@@ -246,6 +478,206 @@
     div.textContent = str == null ? '' : String(str);
     return div.innerHTML;
   }
+
+  var whoBadge = document.getElementById('whoBadge');
+  var authToggle = document.getElementById('authToggle');
+  var logoutBtn = document.getElementById('logoutBtn');
+  var mypageOverlay = document.getElementById('mypageOverlay');
+  var mypageClose = document.getElementById('mypageClose');
+  var mypageName = document.getElementById('mypageName');
+  var mypageEmail = document.getElementById('mypageEmail');
+  var mypageAvatar = document.getElementById('mypageAvatar');
+  var mypageProvider = document.getElementById('mypageProvider');
+  var mypageTotalCount = document.getElementById('mypageTotalCount');
+  var mypageCategories = document.getElementById('mypageCategories');
+  var mypageReservationList = document.getElementById('mypageReservationList');
+  var mypagePasswordSection = document.getElementById('mypagePasswordSection');
+  var mypagePasswordToggle = document.getElementById('mypagePasswordToggle');
+  var mypagePasswordForm = document.getElementById('mypagePasswordForm');
+  var mypagePasswordError = document.getElementById('mypagePasswordError');
+  var mypageTabs = document.querySelectorAll('.mypage-tab');
+  var mypagePanels = document.querySelectorAll('.mypage-tab-panel');
+
+  var currentUser = null;
+  var myFavorites = [];
+  var mypageReservations = [];
+
+  function getDisplayName(user){
+    var meta = user.user_metadata || {};
+    return meta.full_name || meta.name || user.email.split('@')[0];
+  }
+
+  function renderAuthState(user){
+    if (user){
+      whoBadge.textContent = getDisplayName(user) + '님';
+      if (logoutBtn) logoutBtn.hidden = false;
+      if (authToggle){ authToggle.textContent = 'MYPAGE'; authToggle.setAttribute('aria-label', '마이페이지'); }
+      loadMypageFavorites();
+      loadMypageReservations();
+    } else {
+      whoBadge.textContent = '';
+      if (logoutBtn) logoutBtn.hidden = true;
+      if (authToggle){ authToggle.textContent = 'LOGIN'; authToggle.setAttribute('aria-label', 'Login'); }
+      myFavorites = [];
+      mypageReservations = [];
+    }
+  }
+
+  if (authToggle) authToggle.addEventListener('click', function(){
+    if (currentUser) openMypage();
+    else window.location.href = '../index.html';
+  });
+  if (logoutBtn) logoutBtn.addEventListener('click', function(){
+    supabaseClient.auth.signOut();
+  });
+
+  function loadMypageFavorites(){
+    if (!currentUser) return;
+    supabaseClient.from('favorites').select('item_id, title, category').eq('user_id', currentUser.id).then(function(res){
+      myFavorites = res.data || [];
+      if (!mypageOverlay.classList.contains('open')) return;
+      renderMypageFavorites();
+    });
+  }
+
+  function renderMypageFavorites(){
+    mypageTotalCount.textContent = myFavorites.length;
+    var byCategory = {};
+    myFavorites.forEach(function(f){
+      if (!byCategory[f.category]) byCategory[f.category] = [];
+      byCategory[f.category].push(f.title);
+    });
+    var categories = Object.keys(byCategory);
+    if (categories.length === 0){
+      mypageCategories.innerHTML = '<p class="mypage-empty">아직 찜한 게시물이 없어요.</p>';
+      return;
+    }
+    mypageCategories.innerHTML = categories.map(function(cat){
+      var titles = byCategory[cat];
+      var items = titles.map(function(t){ return '<li>' + escapeHtml(t) + '</li>'; }).join('');
+      return '<div class="mypage-category"><h4><span>' + escapeHtml(cat) + '</span><span class="cnt">' + titles.length + '개</span></h4><ul>' + items + '</ul></div>';
+    }).join('');
+  }
+
+  var MYPAGE_STATUS_LABEL = { '접수중':'접수중', '확정':'확정', '보류':'보류', '취소':'취소' };
+  var MYPAGE_STATUS_CLASS = { '접수중':'r-status-pending', '확정':'r-status-confirmed', '보류':'r-status-hold', '취소':'r-status-cancelled' };
+
+  function loadMypageReservations(){
+    if (!currentUser) return;
+    supabaseClient.from('reservations').select('org_name, name, phone, res_date, res_time, visitor_count, note, status')
+      .eq('user_id', currentUser.id).order('res_date', { ascending: true }).then(function(res){
+        mypageReservations = res.data || [];
+        if (!mypageOverlay.classList.contains('open')) return;
+        renderMypageReservations();
+      });
+  }
+
+  function renderMypageReservations(){
+    var html = !mypageReservations.length
+      ? '<p class="mypage-empty">아직 예약 내역이 없어요.</p>'
+      : mypageReservations.map(function(r){
+          var status = r.status || '접수중';
+          var statusClass = MYPAGE_STATUS_CLASS[status] || 'r-status-pending';
+          var statusLabel = MYPAGE_STATUS_LABEL[status] || status;
+          var noteHtml = r.note ? '<div class="r-note">' + escapeHtml(r.note) + '</div>' : '';
+          return '<div class="reservation-item">' +
+            '<div class="r-top"><span class="r-org">' + escapeHtml(r.org_name || '') + '</span>' +
+            '<span class="r-status ' + statusClass + '">' + escapeHtml(statusLabel) + '</span></div>' +
+            '<span class="r-date">' + escapeHtml(r.res_date) + ' ' + escapeHtml(r.res_time || '') + ' · 인원 ' + escapeHtml(String(r.visitor_count || '')) + '명</span>' +
+            '<div>' + escapeHtml(r.name) + ' · ' + escapeHtml(r.phone) + '</div>' +
+            noteHtml + '</div>';
+        }).join('');
+    mypageReservationList.innerHTML = html;
+  }
+
+  function switchMypageTab(tab){
+    mypageTabs.forEach(function(btn){ btn.classList.toggle('active', btn.dataset.mypageTab === tab); });
+    mypagePanels.forEach(function(panel){ panel.hidden = panel.dataset.mypagePanel !== tab; });
+  }
+  mypageTabs.forEach(function(btn){
+    btn.addEventListener('click', function(){ switchMypageTab(btn.dataset.mypageTab); });
+  });
+
+  function renderMypage(){
+    if (!currentUser) return;
+    var meta = currentUser.user_metadata || {};
+    var linkedProviders = (currentUser.app_metadata && currentUser.app_metadata.providers) || [];
+    var provider = linkedProviders.indexOf('google') !== -1
+      ? 'google'
+      : ((currentUser.app_metadata && currentUser.app_metadata.provider) || 'email');
+    var displayName = getDisplayName(currentUser);
+    var avatarUrl = meta.avatar_url || meta.picture || '';
+
+    mypageName.textContent = displayName;
+    mypageEmail.textContent = currentUser.email;
+    if (avatarUrl){
+      mypageAvatar.innerHTML = '<img src="' + avatarUrl + '" alt="">';
+      mypageAvatar.classList.remove('mypage-avatar-icon');
+    } else if (provider === 'google'){
+      mypageAvatar.innerHTML = '<svg class="ico" viewBox="0 0 18 18"><use href="#i-google"/></svg>';
+      mypageAvatar.classList.add('mypage-avatar-icon');
+    } else {
+      mypageAvatar.textContent = displayName.charAt(0).toUpperCase();
+      mypageAvatar.classList.remove('mypage-avatar-icon');
+    }
+
+    if (provider === 'google'){
+      mypageProvider.innerHTML = '<svg class="ico" viewBox="0 0 18 18"><use href="#i-google"/></svg><span>Google 계정</span>';
+    } else {
+      mypageProvider.innerHTML = '<svg class="ico" viewBox="0 0 24 24"><use href="#i-mail"/></svg><span>이메일 계정</span>';
+    }
+    if (mypagePasswordSection) mypagePasswordSection.hidden = provider !== 'email';
+
+    renderMypageFavorites();
+    renderMypageReservations();
+  }
+
+  function openMypage(){
+    if (!currentUser) return;
+    renderMypage();
+    switchMypageTab('favorites');
+    if (mypagePasswordForm){ mypagePasswordForm.hidden = true; mypagePasswordForm.reset(); }
+    if (mypagePasswordError) mypagePasswordError.textContent = '';
+    mypageOverlay.classList.add('open');
+  }
+  function closeMypage(){
+    if (mypageOverlay) mypageOverlay.classList.remove('open');
+  }
+  if (mypageClose) mypageClose.addEventListener('click', closeMypage);
+  if (mypageOverlay) mypageOverlay.addEventListener('click', function(e){
+    if (e.target === mypageOverlay) closeMypage();
+  });
+
+  if (mypagePasswordToggle) mypagePasswordToggle.addEventListener('click', function(){
+    mypagePasswordForm.hidden = !mypagePasswordForm.hidden;
+  });
+  if (mypagePasswordForm) mypagePasswordForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    var data = new FormData(mypagePasswordForm);
+    var password = String(data.get('password') || '');
+    if (password.length < 6){ mypagePasswordError.textContent = '비밀번호는 6자 이상이어야 합니다.'; return; }
+    var submitBtn = mypagePasswordForm.querySelector('.btn-primary');
+    submitBtn.disabled = true;
+    mypagePasswordError.textContent = '';
+    mypagePasswordError.classList.remove('ok');
+    supabaseClient.auth.updateUser({ password: password }).then(function(res){
+      submitBtn.disabled = false;
+      if (res.error){ mypagePasswordError.textContent = res.error.message; return; }
+      mypagePasswordForm.reset();
+      mypagePasswordForm.hidden = true;
+      mypagePasswordError.classList.add('ok');
+      mypagePasswordError.textContent = '비밀번호가 변경되었습니다.';
+    });
+  });
+
+  supabaseClient.auth.getSession().then(function(res){
+    currentUser = res.data && res.data.session ? res.data.session.user : null;
+    renderAuthState(currentUser);
+  });
+  supabaseClient.auth.onAuthStateChange(function(event, session){
+    currentUser = session ? session.user : null;
+    renderAuthState(currentUser);
+  });
 
   function loadNotices(){
     supabaseClient.from('notices')
