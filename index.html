@@ -289,7 +289,7 @@
     text-align:center;
   }
   .mypage-header .eyebrow{color:var(--gold-soft)}
-  .mypage-header .auth-title{color:#fff; margin-top:6px}
+  .mypage-header .auth-title{color:#fff; margin-top:6px; font-family:var(--font-body)}
   .mypage-modal .auth-close{color:rgba(255,255,255,.8)}
   .mypage-modal .auth-close:hover{color:#fff; background:rgba(255,255,255,.15)}
   .mypage-profile{display:flex; align-items:center; gap:14px; padding:20px 0 20px}
@@ -332,8 +332,6 @@
     background:var(--bg); color:var(--ink); font:inherit; font-size:.92rem; resize:vertical;
   }
   .auth-field-plain textarea:focus, .auth-field.auth-field-plain input:focus{outline:none; border-color:var(--indigo)}
-  .reservation-list-wrap{margin-top:22px; padding-top:18px; border-top:1px solid var(--line)}
-  .reservation-list-title{font-size:.85rem; font-weight:800; color:var(--ink); margin:0 0 10px}
   .reservation-list{display:flex; flex-direction:column; gap:8px; max-height:220px; overflow-y:auto}
   .reservation-item{border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:.82rem; color:var(--ink-soft)}
   .reservation-item .r-top{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:4px}
@@ -1177,11 +1175,6 @@
       <p class="auth-error" id="reservationError"></p>
       <button type="submit" class="auth-submit">예약하기</button>
     </form>
-
-    <div class="reservation-list-wrap">
-      <h3 class="reservation-list-title">내 예약</h3>
-      <div class="reservation-list" id="reservationList"></div>
-    </div>
   </div>
 </div>
 
@@ -1616,7 +1609,6 @@
     var reservationClose = document.getElementById('reservationClose');
     var reservationForm = document.getElementById('reservationForm');
     var reservationError = document.getElementById('reservationError');
-    var reservationList = document.getElementById('reservationList');
     if (!authToggle || !authOverlay || !window.supabase) return;
 
     var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -1813,7 +1805,6 @@
               '<div>' + escapeHtml(r.name) + ' · ' + escapeHtml(r.phone) + '</div>' +
               noteHtml + '</div>';
           }).join('');
-      if (reservationList) reservationList.innerHTML = html;
       if (mypageReservationList) mypageReservationList.innerHTML = html;
     }
 
@@ -1826,7 +1817,6 @@
       setMessage(reservationError, '');
       var dateInput = reservationForm.querySelector('input[name="res_date"]');
       if (dateInput) dateInput.min = new Date().toISOString().slice(0, 10);
-      renderReservationList();
       reservationOverlay.classList.add('open');
     }
     function closeReservationModal(){
