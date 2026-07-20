@@ -25,15 +25,99 @@
 
   .wrap{max-width:820px; margin:0 auto; padding:0 20px 80px}
 
-  .board-head{
-    display:flex; align-items:center; justify-content:space-between; gap:12px;
-    max-width:820px; margin:0 auto; padding:20px; border-bottom:1px solid var(--line);
+  header{
+    position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; row-gap:10px; padding:14px 20px; gap:20px;
+    background:color-mix(in srgb, var(--surface) 92%, transparent); color:var(--ink);
+    box-shadow:0 1px 0 var(--line); backdrop-filter:saturate(1.4) blur(10px);
   }
-  .brand{font-family:var(--font-display); font-weight:700; font-size:1.1rem; letter-spacing:.02em}
-  .head-right{display:flex; align-items:center; gap:12px; font-size:.84rem; color:var(--ink-soft); min-width:0}
-  .head-right #whoBadge{overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:36vw}
-  .head-right .btn-ghost{flex:none; background:none; border:1.5px solid var(--line); border-radius:20px; padding:7px 14px; color:var(--ink-soft); font-size:.8rem}
-  @media (max-width:480px){ .board-head{padding:14px 16px} .card{padding:18px} }
+  .brand-lockup{display:flex; align-items:center; gap:12px}
+  header .brand{display:flex; align-items:center; gap:10px; font-family:var(--font-display)}
+  header .brand .word{display:flex; flex-direction:column; line-height:1.05}
+  header .brand .kr{font-size:1.5rem; font-weight:800; letter-spacing:.01em; font-family:var(--font-body); color:var(--indigo)}
+  header .brand .kr .big{font-size:1em; line-height:1}
+  header .brand .en{font-size:.76rem; letter-spacing:.2em; opacity:.7; font-weight:600}
+  .brand-divider{width:1px; height:28px; background:var(--line); margin:0 4px}
+  .slogan-badge{display:flex; flex-direction:column; line-height:1.2}
+  .slogan-badge .yr{font-size:.68rem; letter-spacing:.1em; opacity:.7; font-weight:600}
+  .slogan-badge .sl{display:flex; align-items:center; gap:5px; font-size:.95rem; white-space:nowrap}
+  .slogan-badge .sl em{font-style:italic; font-weight:800; color:var(--brick)}
+  .slogan-badge .sl strong{font-weight:800; color:var(--indigo)}
+  @media (max-width:720px){ .brand-divider, .slogan-badge{display:none} }
+
+  .head-actions{display:flex; align-items:center; flex-wrap:wrap; justify-content:flex-end; row-gap:10px; gap:12px; font-size:.92rem}
+  .head-actions .ico{width:16px; height:16px}
+  .head-actions button, .head-actions a{display:flex; align-items:center; gap:5px}
+  .auth-widget{display:inline-flex; align-items:center; gap:8px; min-width:0}
+  .auth-greeting{font-size:.85rem; font-weight:700; color:var(--ink); white-space:nowrap; max-width:100px; overflow:hidden; text-overflow:ellipsis}
+  .header-login-btn{
+    font-size:.85rem; font-weight:800; letter-spacing:.04em; padding:7px 14px; min-height:34px;
+    border:1.5px solid var(--indigo); border-radius:6px; background:var(--indigo); color:#fff; text-transform:uppercase;
+  }
+  .header-logout-btn{flex:none; font-size:.82rem; font-weight:700; color:var(--brick); background:none; border:1.5px solid var(--line); border-radius:20px; padding:7px 14px}
+  .goods-badge{
+    display:flex; align-items:center; justify-content:center; gap:6px; font-size:.74rem; font-weight:700;
+    padding:7px 10px; border:1.5px solid var(--line); border-radius:6px; min-height:34px; color:var(--ink-soft);
+  }
+  .goods-badge .ico{width:15px; height:15px}
+  .header-date-chip{
+    display:flex; align-items:center; gap:6px; font-size:.78rem; font-weight:700; color:var(--ink-soft);
+    padding:7px 10px; border:1.5px solid var(--line); border-radius:6px; min-height:34px; font-variant-numeric:tabular-nums;
+  }
+  .header-date-chip .ico{width:15px; height:15px; color:var(--gold)}
+  .head-actions .icon-btn{width:34px; height:34px; justify-content:center; border:none; background:none; color:var(--ink-soft)}
+
+  .menu-overlay{
+    position:fixed; inset:0; z-index:200; color:#fff; background:var(--indigo);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; visibility:hidden; transform:translateY(8px);
+    transition:opacity .35s ease, transform .35s ease, visibility 0s linear .35s;
+  }
+  .menu-overlay.open{ opacity:1; visibility:visible; transform:none; transition:opacity .35s ease, transform .35s ease, visibility 0s; }
+  .menu-close{
+    position:absolute; top:18px; right:20px; width:40px; height:40px;
+    display:flex; align-items:center; justify-content:center; color:#fff;
+    border:1px solid rgba(255,255,255,.3); border-radius:50%;
+  }
+  .menu-close .ico{width:18px; height:18px}
+  .menu-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(24px,5vw,64px) clamp(24px,5vw,56px);
+    max-width:1180px; width:100%; padding:0 40px;
+  }
+  .menu-col h3{font-family:var(--font-body); font-size:1.2rem; font-weight:700; color:#fff; margin:0 0 14px}
+  .menu-col h3 a{color:#fff}
+  .menu-col h3 a:hover{color:var(--gold-soft)}
+  .menu-col ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:13px}
+  .menu-col ul a{font-size:1rem; font-weight:600; color:rgba(255,255,255,.88); transition:color .2s}
+  .menu-col ul a:hover{color:#fff}
+  @media (max-width:760px){ .menu-grid{grid-template-columns:repeat(2,1fr); row-gap:36px} }
+
+  .quicklinks-row{ max-width:820px; margin:0 auto; padding:28px 20px 0; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap }
+  .quicklinks-title{ display:flex; align-items:center; gap:8px; flex:0 0 auto }
+  .quicklinks-title .ico{width:26px; height:26px; flex:none}
+  .quicklinks-title h3{ font-family:var(--font-body); font-weight:800; font-size:.96rem; margin:0; line-height:1.3 }
+  .quicklinks-title p{ font-size:.76rem; color:var(--ink-soft); margin:2px 0 0 }
+  .quicklinks-links{ display:flex; align-items:center; justify-content:flex-end; flex:1 1 auto; flex-wrap:wrap; gap:10px }
+  .quicklink{
+    display:inline-flex; align-items:center; gap:8px; font-size:.85rem; font-weight:600;
+    color:var(--ink); padding:10px 16px; border:1px solid var(--line); border-radius:8px; background:var(--surface);
+  }
+  .quicklink .ico{width:18px; height:18px}
+  .quicklink:hover{ border-color:var(--indigo); color:var(--indigo) }
+  @media (max-width:600px){ .quicklinks-row{flex-direction:column; align-items:flex-start} .quicklinks-links{justify-content:flex-start} }
+
+  footer{background:var(--indigo); color:rgba(255,255,255,.86); margin-top:40px}
+  .foot-top{max-width:820px; margin:0 auto; padding:clamp(36px,6vw,56px) 20px 0; display:flex; justify-content:center; text-align:center}
+  .foot-brand .brand{color:#fff; justify-content:center}
+  .foot-brand p{color:rgba(255,255,255,.62); font-size:.85rem; margin-top:12px}
+  .foot-bottom{
+    max-width:820px; margin:0 auto; border-top:1px solid rgba(255,255,255,.14); padding:20px;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:.76rem; color:rgba(255,255,255,.5);
+  }
+  .foot-bottom .stores{display:flex; gap:10px}
+  .store-btn{border:1px solid rgba(255,255,255,.3); border-radius:6px; padding:6px 12px; font-size:.75rem; color:rgba(255,255,255,.8)}
+
+  @media (max-width:480px){ .card{padding:18px} }
 
   .board-intro{padding:40px 0 24px; text-align:center}
   .eyebrow{font-size:.72rem; font-weight:700; letter-spacing:.14em; color:var(--gold)}
@@ -84,11 +168,66 @@
 </head>
 <body>
 
-<div class="board-head">
-  <a class="brand" href="../index.html">VISIT-LOCAL</a>
-  <div class="head-right">
-    <span id="whoBadge"></span>
-    <button type="button" class="btn-ghost" id="logoutBtn" hidden>로그아웃</button>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 9h18M12 9v12M12 9C9 9 7 7.5 7 5.5A2.5 2.5 0 0 1 12 5a2.5 2.5 0 0 1 5 .5C17 7.5 15 9 12 9Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 9.5h17M8 3v3.5M16 3v3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m20 20-4.3-4.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.3-8.6C1.2 8 3 4.5 6.6 4.5c2 0 3.6 1.2 4.4 2.8.8-1.6 2.4-2.8 4.4-2.8C19 4.5 20.8 8 21.3 11.4 19 15.6 12 20 12 20Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.3 7-11.6A7 7 0 0 0 5 9.4C5 14.7 12 21 12 21Z" fill="#FBDDC2" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="12" cy="9.2" r="2.7" fill="#FF7A29"/></symbol>
+    <symbol id="i-passport" viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" rx="2" fill="#FBDDC2" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="10" r="3.4" fill="none" stroke="currentColor" stroke-width="1.1"/><path d="M8.6 10h6.8M12 6.6v6.8" stroke="currentColor" stroke-width=".9"/><rect x="9" y="16" width="6" height="1.5" rx=".7" fill="#FF7A29"/></symbol>
+    <symbol id="i-car" viewBox="0 0 24 24"><path d="M3.6 15.6 5 11a2 2 0 0 1 1.9-1.4h10.2A2 2 0 0 1 19 11l1.4 4.6v2.9a1 1 0 0 1-1 1h-.9a1 1 0 0 1-1-1v-.6H6.5v.6a1 1 0 0 1-1 1h-.9a1 1 0 0 1-1-1Z" fill="#FBDDC2" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M5 11h14" stroke="currentColor" stroke-width="1"/><circle cx="7.2" cy="15.8" r="1.05" fill="#FF7A29"/><circle cx="16.8" cy="15.8" r="1.05" fill="#FF7A29"/></symbol>
+    <symbol id="i-suitcase" viewBox="0 0 24 24"><rect x="3.5" y="8" width="17" height="12" rx="1.6" fill="#FBDDC2" stroke="currentColor" stroke-width="1.4"/><path d="M9 8V5.6A1.6 1.6 0 0 1 10.6 4h2.8A1.6 1.6 0 0 1 15 5.6V8" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M3.5 13h17" stroke="currentColor" stroke-width="1"/><circle cx="7.3" cy="16.3" r="1" fill="#FF7A29"/></symbol>
+    <symbol id="i-compass2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#FBDDC2" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="6.1" fill="none" stroke="currentColor" stroke-width=".9"/><path d="m14.5 9.5-1.8 5-5 1.8 1.8-5Z" fill="#FF7A29" stroke="currentColor" stroke-width=".9" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<header id="siteHeader">
+  <div class="brand-lockup">
+    <a class="brand" href="../index.html" aria-label="홈으로 이동">
+      <div class="word">
+        <span class="kr"><span class="big">V</span>ISIT-<span class="big">L</span>OCAL</span>
+        <span class="en">official visitor guide</span>
+      </div>
+    </a>
+    <div class="brand-divider"></div>
+    <div class="slogan-badge">
+      <span class="yr">2025 — 2026</span>
+      <span class="sl"><em>TOUR</em><strong>내 지역 NOW!</strong></span>
+    </div>
+  </div>
+  <div class="head-actions">
+    <div class="auth-widget">
+      <span class="auth-greeting" id="whoBadge"></span>
+      <a class="header-login-btn" id="headerLoginBtn" href="#loginPrompt">LOGIN</a>
+      <button type="button" class="header-logout-btn" id="logoutBtn" hidden>로그아웃</button>
+    </div>
+    <button type="button" class="goods-badge" aria-label="내 지역 굿즈"><svg class="ico" viewBox="0 0 24 24"><use href="#i-gift"/></svg>GOODS</button>
+    <span class="header-date-chip"><svg class="ico" viewBox="0 0 24 24"><use href="#i-calendar"/></svg><span id="headerDate"></span></span>
+    <button type="button" class="icon-btn" aria-label="검색"><svg class="ico" viewBox="0 0 24 24"><use href="#i-search"/></svg></button>
+    <button type="button" class="icon-btn" aria-label="찜하기"><svg class="ico" viewBox="0 0 24 24"><use href="#i-heart"/></svg></button>
+    <button type="button" class="icon-btn" id="menuBtn" aria-label="전체 메뉴" aria-expanded="false" aria-controls="menuOverlay"><svg class="ico" viewBox="0 0 24 24"><use href="#i-menu"/></svg></button>
+  </div>
+</header>
+
+<div class="menu-overlay" id="menuOverlay">
+  <button type="button" class="menu-close" id="menuClose" aria-label="메뉴 닫기"><svg class="ico" viewBox="0 0 24 24"><use href="#i-close"/></svg></button>
+  <div class="menu-grid">
+    <div class="menu-col"><h3><a href="../index.html#upcoming">ShowsUpdates</a></h3></div>
+    <div class="menu-col"><h3><a href="../index.html#courses">에디터 추천여행</a></h3></div>
+    <div class="menu-col"><h3><a href="../petfriendly/index.html">반려동물 동반 관광지</a></h3></div>
+    <div class="menu-col"><h3><a href="../board/index.html">Discover Local</a></h3></div>
+    <div class="menu-col"><h3><a href="../index.html#info">여행정보</a></h3></div>
+    <div class="menu-col"><h3><a href="index.html">예약하기</a></h3></div>
+    <div class="menu-col">
+      <h3>커뮤니티</h3>
+      <ul>
+        <li><a href="../board/notice.html">공지사항</a></li>
+        <li><a href="../board/qna.html">질문하기</a></li>
+      </ul>
+    </div>
   </div>
 </div>
 
@@ -170,6 +309,66 @@
   </div>
 </div>
 
+<div class="quicklinks-row">
+  <div class="quicklinks-title">
+    <svg class="ico" viewBox="0 0 24 24"><use href="#i-pin"/></svg>
+    <div>
+      <h3>여행을 준비하는 가장 쉬운 방법</h3>
+      <p>내 지역 여행에 필요한 정보를 한눈에 확인하세요</p>
+    </div>
+  </div>
+  <div class="quicklinks-links">
+    <a class="quicklink" href="#"><svg class="ico" viewBox="0 0 24 24"><use href="#i-passport"/></svg>가이드북</a>
+    <a class="quicklink" href="#"><svg class="ico" viewBox="0 0 24 24"><use href="#i-car"/></svg>교통 안내</a>
+    <a class="quicklink" href="#"><svg class="ico" viewBox="0 0 24 24"><use href="#i-suitcase"/></svg>숙박</a>
+    <a class="quicklink" href="#"><svg class="ico" viewBox="0 0 24 24"><use href="#i-compass2"/></svg>도보해설관광</a>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-top">
+    <div class="foot-brand">
+      <div class="brand">
+        <div class="word">
+          <span class="kr"><span class="big">V</span>ISIT-<span class="big">L</span>OCAL</span>
+          <span class="en">official visitor guide</span>
+        </div>
+      </div>
+      <p>내 지역의 공식 관광 안내 콘셉트 페이지입니다.</p>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>이 페이지는 디자인 시안 목적의 콘셉트 목업이며, 실존 서비스가 아닙니다.</span>
+    <div class="stores"><span class="store-btn">App Store</span><span class="store-btn">Google Play</span></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var menuBtn = document.getElementById('menuBtn');
+  var menuOverlay = document.getElementById('menuOverlay');
+  var menuClose = document.getElementById('menuClose');
+  function openMenu(){ menuOverlay.classList.add('open'); menuBtn.setAttribute('aria-expanded', 'true'); }
+  function closeMenu(){ menuOverlay.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); }
+  if (menuBtn && menuOverlay){
+    menuBtn.addEventListener('click', function(){
+      menuOverlay.classList.contains('open') ? closeMenu() : openMenu();
+    });
+    if (menuClose) menuClose.addEventListener('click', closeMenu);
+    menuOverlay.querySelectorAll('a').forEach(function(link){
+      link.addEventListener('click', closeMenu);
+    });
+  }
+  var headerDate = document.getElementById('headerDate');
+  if (headerDate){
+    var f = new Intl.DateTimeFormat('ko-KR', { month: '2-digit', day: '2-digit', weekday: 'short' });
+    var parts = f.formatToParts(new Date());
+    function getPart(t){ var p = parts.find(function(x){ return x.type === t; }); return p ? p.value : ''; }
+    headerDate.textContent = getPart('month') + '.' + getPart('day') + '(' + getPart('weekday') + ')';
+  }
+})();
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
@@ -179,6 +378,7 @@
 
   var whoBadge = document.getElementById('whoBadge');
   var logoutBtn = document.getElementById('logoutBtn');
+  var headerLoginBtn = document.getElementById('headerLoginBtn');
   var loginPrompt = document.getElementById('loginPrompt');
   var liEmail = document.getElementById('liEmail');
   var liPassword = document.getElementById('liPassword');
@@ -212,6 +412,7 @@
     if (user){
       whoBadge.textContent = getDisplayName(user) + '님';
       logoutBtn.hidden = false;
+      if (headerLoginBtn) headerLoginBtn.hidden = true;
       loginPrompt.hidden = true;
       reservationForm.hidden = false;
       writeWho.textContent = getDisplayName(user);
@@ -222,6 +423,7 @@
     } else {
       whoBadge.textContent = '';
       logoutBtn.hidden = true;
+      if (headerLoginBtn) headerLoginBtn.hidden = false;
       loginPrompt.hidden = false;
       reservationForm.hidden = true;
       myReservationsSection.hidden = true;
