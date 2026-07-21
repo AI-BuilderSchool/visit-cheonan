@@ -55,6 +55,9 @@
       <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
       <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
     </symbol>
+    <symbol id="i-kakao" viewBox="0 0 18 18">
+      <path fill="#391B1B" d="M9 1.5c-4.556 0-8.25 2.86-8.25 6.39 0 2.28 1.53 4.28 3.84 5.42-.17.62-.6 2.22-.69 2.56-.11.43.16.42.33.31.14-.09 2.16-1.46 3.04-2.05.56.08 1.14.12 1.73.12 4.556 0 8.25-2.86 8.25-6.39S13.556 1.5 9 1.5Z"/>
+    </symbol>
   </defs>
 </svg>
 
@@ -404,21 +407,23 @@
   }
   .auth-oauth-btn:hover{background:var(--bg-alt); border-color:var(--ink-faint)}
   .auth-oauth-btn .ico{width:18px; height:18px}
-  .auth-section{margin-bottom:22px}
+  .auth-oauth-btn--kakao{background:#FEE500; border-color:#FEE500; color:#191919; margin-top:10px}
+  .auth-oauth-btn--kakao:hover{background:#FDD800; border-color:#FDD800}
+  .auth-section{margin-bottom:14px}
   .auth-section:last-child{margin-bottom:0}
-  .auth-section + .auth-section{padding-top:22px; border-top:1px dashed var(--line)}
-  .auth-section-label{font-family:var(--font-body); font-size:1.368rem; font-weight:800; color:var(--indigo); letter-spacing:.03em; margin:0 0 12px; text-align:center}
-  .auth-field{position:relative; margin-bottom:14px}
+  .auth-section + .auth-section{padding-top:14px; border-top:1px dashed var(--line)}
+  .auth-section-label{font-family:var(--font-body); font-size:1.368rem; font-weight:800; color:var(--indigo); letter-spacing:.03em; margin:0 0 8px; text-align:center}
+  .auth-field{position:relative; margin-bottom:8px}
   .auth-field .ico{position:absolute; left:14px; top:50%; transform:translateY(-50%); width:16px; height:16px; color:var(--ink-faint)}
   .auth-field input{
-    width:100%; padding:12px 14px 12px 40px; border:1.5px solid var(--line); border-radius:9px;
+    width:100%; padding:8px 14px 8px 40px; border:1.5px solid var(--line); border-radius:9px;
     background:var(--bg); color:var(--ink); font:inherit; font-size:.92rem;
   }
   .auth-field input:focus{outline:none; border-color:var(--indigo)}
-  .auth-error{font-size:.78rem; color:var(--brick); margin:-6px 0 12px; min-height:1em}
+  .auth-error{font-size:.78rem; color:var(--brick); margin:-4px 0 6px; min-height:1em}
   .auth-error.is-success{color:var(--sage)}
   .auth-submit:disabled{opacity:.6; cursor:default}
-  .auth-submit{width:100%; padding:13px; border-radius:9px; background:var(--indigo); color:#fff; font-weight:800; font-size:.94rem; letter-spacing:.02em; transition:background .2s}
+  .auth-submit{width:100%; padding:10px; border-radius:9px; background:var(--indigo); color:#fff; font-weight:800; font-size:.94rem; letter-spacing:.02em; transition:background .2s}
   .auth-submit:hover{background:var(--indigo-soft)}
   .auth-switch{text-align:center; font-size:.82rem; color:var(--ink-soft); margin-top:16px}
   .auth-switch button{color:var(--indigo); font-weight:700}
@@ -1053,6 +1058,10 @@
         <svg class="ico" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-google"/></svg>
         구글 계정으로 로그인하기
       </button>
+      <button type="button" class="auth-oauth-btn auth-oauth-btn--kakao" id="authKakaoBtn">
+        <svg class="ico" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-kakao"/></svg>
+        카카오 계정으로 로그인하기
+      </button>
     </div>
 
     <div class="auth-section">
@@ -1573,6 +1582,7 @@
     var authBackToLoginBtn = document.getElementById('authBackToLoginBtn');
     var authSwitch = document.getElementById('authSwitch');
     var authGoogleBtn = document.getElementById('authGoogleBtn');
+    var authKakaoBtn = document.getElementById('authKakaoBtn');
     var recoveryOverlay = document.getElementById('recoveryOverlay');
     var recoveryForm = document.getElementById('recoveryForm');
     var recoveryError = document.getElementById('recoveryError');
@@ -1769,6 +1779,8 @@
       var linkedProviders = (currentUser.app_metadata && currentUser.app_metadata.providers) || [];
       var provider = linkedProviders.indexOf('google') !== -1
         ? 'google'
+        : linkedProviders.indexOf('kakao') !== -1
+        ? 'kakao'
         : ((currentUser.app_metadata && currentUser.app_metadata.provider) || 'email');
       var displayName = getDisplayName(currentUser);
       var avatarUrl = meta.avatar_url || meta.picture || '';
@@ -1781,6 +1793,9 @@
       } else if (provider === 'google'){
         mypageAvatar.innerHTML = '<svg class="ico" viewBox="0 0 18 18"><use href="#i-google"/></svg>';
         mypageAvatar.classList.add('mypage-avatar-icon');
+      } else if (provider === 'kakao'){
+        mypageAvatar.innerHTML = '<svg class="ico" viewBox="0 0 18 18"><use href="#i-kakao"/></svg>';
+        mypageAvatar.classList.add('mypage-avatar-icon');
       } else {
         mypageAvatar.textContent = displayName.charAt(0).toUpperCase();
         mypageAvatar.classList.remove('mypage-avatar-icon');
@@ -1788,6 +1803,8 @@
 
       if (provider === 'google'){
         mypageProvider.innerHTML = '<svg class="ico" viewBox="0 0 18 18"><use href="#i-google"/></svg><span>Google 계정</span>';
+      } else if (provider === 'kakao'){
+        mypageProvider.innerHTML = '<svg class="ico" viewBox="0 0 18 18"><use href="#i-kakao"/></svg><span>카카오 계정</span>';
       } else {
         mypageProvider.innerHTML = '<svg class="ico" viewBox="0 0 24 24"><use href="#i-mail"/></svg><span>이메일 계정</span>';
       }
@@ -1952,6 +1969,12 @@
     if (authGoogleBtn) authGoogleBtn.addEventListener('click', function(){
       supabaseClient.auth.signInWithOAuth({
         provider: 'google',
+        options: { redirectTo: window.location.origin + window.location.pathname }
+      });
+    });
+    if (authKakaoBtn) authKakaoBtn.addEventListener('click', function(){
+      supabaseClient.auth.signInWithOAuth({
+        provider: 'kakao',
         options: { redirectTo: window.location.origin + window.location.pathname }
       });
     });
